@@ -143,8 +143,6 @@ export class StorageHelper {
       type: "arraybuffer", // changed from blob to arrayBuffer
     },(update)=>{
       console.log(update.percent);
-    }).then((res)=>{
-      // saveAs(res,'filename');
     });
     // this.storageState = StorageProcess.SYNCING;
     let key = this.getKey(sessionId,sessionId) + ".zip";
