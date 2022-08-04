@@ -1,4 +1,11 @@
 import { Component } from '@angular/core';
+import {aws_exports} from "./aws-exports";
+import {StorageHelper} from "./Bloc/Storage/Storage";
+import {FormControl, Validators} from "@angular/forms";
+
+
+
+
 
 @Component({
   selector: 'app-root',
@@ -7,4 +14,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'ZipZapZwoopBeta';
+
 }

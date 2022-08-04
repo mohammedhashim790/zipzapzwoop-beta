@@ -3,7 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiKey:'https://zip-zap-zwoop-beta-storage214657-dev.s3.ap-south-1.amazonaws.com/public/'
 };
 
 /*

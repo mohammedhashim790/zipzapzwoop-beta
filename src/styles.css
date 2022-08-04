@@ -1,1 +1,203 @@
-/* You can add global styles to this file, and also import other style files */
+
+*{
+  margin: 0;
+  font-family: "Segoe UI";
+
+}
+download-transfer{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+body{
+  height: 100vh;
+}
+::-webkit-scrollbar{
+  width: 5px;
+}
+::-webkit-scrollbar-track{
+  background: #d9d9d9;
+  border-radius: 50px;
+}
+::-webkit-scrollbar-thumb{
+  background: #a6a6a6;
+  border-radius: 50px;
+}
+
+button{
+  cursor: pointer;
+}
+
+
+.primary-color{
+  background-color: #995700;
+}
+.primary-text-color{
+  color: #995700;
+}
+.primary-app-button{
+  width: auto;
+  height: auto;
+  padding: 0.5rem;
+  color: white;
+  font-weight: bolder;
+  background: #995700;
+  border-radius: 100px;
+  border: 1px solid slategrey;
+}
+.input-field{
+  position: relative;
+}
+
+.link:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.bottom-send{
+  bottom: 0;
+  width: 100%;
+  position: absolute;
+}
+.submit{
+  padding: 0.5rem;
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  font-size: 1.0rem;
+  text-align: center;
+  border: none;
+  outline: none;
+  color: white;
+  justify-content: center;
+}
+
+
+.input-field .key{
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #545d6b;
+  transform: translate(10px,25px);
+  transform-origin: left;
+  transition: transform .25s;
+}
+.input-field .value{
+  border: none;
+}
+
+.input-field .value:focus .key ,.input-field .value:valid ~ .key{
+  transform: translate(0,0px) scale(0.8) !important;
+  color: slategray;
+}
+
+/*.input-field:focus-within .key,.input-field input:valid .key{*/
+/*  transform: translate(0,0px) scale(0.8);*/
+/*  color: slategray;*/
+/*}*/
+
+
+
+.input-field:valid{
+  display: none;
+}
+
+
+.error-input{
+  border-color: darkred !important;
+}
+.message{
+  width: 300px;
+  min-height: 150px;
+  resize: none;
+  position: relative !important;
+  top: 15px !important;
+}
+
+.carton{
+  min-width: 350px !important;
+}
+
+.empty-button{
+  background: none;
+  border: none;
+}
+.disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+@keyframes rotate {
+  0%{
+    transform: rotate(0deg);
+  }
+  50%{
+    transform: rotate(180deg);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
+}
+.loader{
+  border: 3px solid ghostwhite;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin: auto;
+  display: flex;
+  border-top-color: cornflowerblue;
+  animation: rotate;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+}
+
+
+.bubble-message-container{
+  background-color: rgba(0, 0, 0, 0.54);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  width: 75%;
+  height: 25px;
+  max-height: 50px;
+  position: absolute;
+  top: -20%;
+  color: white;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999999;
+  border-radius: 10px;
+  transition: all;
+  transition-duration: 500ms;
+  transition-timing-function: ease-in;
+  padding: 4%;
+  /*opacity: 0;*/
+  animation: Hover 3s ease-in-out infinite;
+}
+.bubble-message-container:after{
+  content: '';
+  display: flex;
+  bottom: -10px;
+  margin: auto;
+  color: white;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 10px solid rgba(0, 0, 0, 0.54);
+}
+@keyframes Hover {
+  0%{
+    top: -20%;
+  }
+  50%{
+    top: -30%;
+  }
+  100%{
+    top: -20%;
+  }
+}

@@ -1,0 +1,7 @@
+
+export enum EmailEpitome{
+  DELIVERY = "DELIVERY",
+  NOTIFY = "NOTIFY",
+  ACKNOWLEDGE = "ACKNOWLEDGE",
+  VERIFY = "VERIFY"
+}
