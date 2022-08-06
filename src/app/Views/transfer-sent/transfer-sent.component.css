@@ -1,0 +1,149 @@
+.container{
+  /*height: 520px;*/
+  margin: auto;
+  height: 100%;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  justify-content: center;
+  align-items: center;
+  place-items: center;
+  min-height: 400px;
+  margin-bottom: 12%;
+}
+.loading-container {
+  min-width: 350px;
+  min-height: 350px;
+  width: 100%;
+  height: 100%;
+  max-height: 350px;
+  max-width: 350px;
+  margin: auto;
+  justify-content: center;
+  display: flex;
+  overflow: clip;
+  position: relative;
+}
+.loading-container .outer{
+  height: 50%;
+  width: 50%;
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  position: relative;
+  border: 1px solid;
+  /*border-color: #707070;*/
+  border-radius: 50%;
+  border-top-color: white;
+  border-bottom-color: white;
+  border-right-color: #707070;
+  border-left-color: #707070;
+  animation: rotate;
+  animation-duration: 500ms;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite;
+}
+
+
+
+.loading-container .inner{
+  /*width: 40%;*/
+  /*height: 40%;*/
+  /*border-radius: 50%;*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 41%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+}
+.notification{
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #A30000;
+  border-color: #A30000;
+  top: -20%;
+  right: -20%;
+  color: white;
+  text-align: center;
+  font-weight: bolder;
+  animation: scaleBigSmall;
+  animation-duration: 1000ms;
+  animation-delay: 2.5s;
+  animation-fill-mode: both;
+  transform: scale(0);
+
+}
+@keyframes scaleBigSmall {
+  0%{
+    transform: scale(0);
+  }
+  100%{
+    transform: scale(1.0);
+  }
+}
+
+
+.loading-container .inner .trimmer{
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: white;
+  transition: all;
+  transition-timing-function: ease-out;
+  transition-duration: 250ms;
+  /*transform: scale(2.0);*/
+}
+.loading-container .inner .loading-num{
+  color: black;
+  position: absolute;
+  z-index: 999;
+  mix-blend-mode: unset;
+}
+
+
+
+.info{
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  color: #995700;
+}
+
+.info small{
+  color: #707070;
+}
+.link-container{
+  height: 100%;
+  margin: 1.0rem;
+  display: flex;
+  width: 50%;
+  justify-content: center;
+  align-items: center;
+  border-radius: 25px;
+  border: 1px solid #707070;
+  color: #707070;
+  background: white;
+  cursor: copy;
+  font-size: x-small;
+}
+

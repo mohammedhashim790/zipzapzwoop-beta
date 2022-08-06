@@ -1,0 +1,56 @@
+.container{
+  /*height: 520px;*/
+  margin: auto;
+  height: 100%;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  margin-bottom: 12%;
+}
+
+.container div:first-child{
+  margin: auto 2.0rem;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  /*width: 250px;*/
+}
+
+
+.schedule-text{
+  width: 100%;
+  text-justify: distribute;
+  text-align: center;
+  word-wrap: break-word;
+}
+.bottom-send .submit{
+  width: 100%;
+}
+.time-select {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+}
+.time-select > span{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+}
+.time-select select{
+  -webkit-appearance: menulist-button;
+}
+.bottom-send{
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  /*justify-content: center;*/
+}
+.bottom-send button {
+  max-height: 42px;
+}

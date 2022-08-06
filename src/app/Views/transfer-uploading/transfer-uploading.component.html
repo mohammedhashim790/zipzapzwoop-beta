@@ -1,0 +1,50 @@
+<div class="container">
+  <span class="loading-container">
+    <span class="outer primary-text-color" [class.onFinishOuter]="this._getProgress()>=1" style="--border: {{getBorderWidth()}}">
+    </span>
+    <span class="inner" [class.onFinishInner]="this._getProgress()>=1">
+      <ng-container [ngSwitch]="state">
+        <h3 *ngSwitchCase="TransferUploadState.ENGINE_STARTED"
+            class="loading-num">{{getProgress()}}
+        </h3>
+        <h3 *ngSwitchCase="TransferUploadState.ENGINE_STARTING" class="loading-num">Engine Starting</h3>
+        <span *ngSwitchCase="TransferUploadState.ENGINE_CORRUPTED" class="loading-num">
+          <span style="width: 80%;margin: auto;display: flex;flex-direction: row;justify-content: space-evenly">
+            <h3>
+              X
+            </h3>
+            <h3>
+              X
+            </h3>
+          </span>
+          <span>
+            <h3 class="loading-num">
+              Upload Failed.PLease try again
+            </h3>
+          </span>
+
+        </span>
+
+      </ng-container>
+      <span class="trimmer" style="transform: translateX({{getProgress()}});">
+      </span>
+    </span>
+  </span>
+  <span class="progress-container">
+    <small *ngIf="state == TransferUploadState.ENGINE_STARTED" style="font-size: x-small;font-weight: bolder">{{getProgressCompleted()}}</small>
+    <small *ngIf="state == TransferUploadState.COMPRESSING_OBJECTS" style="font-size: x-small;font-weight: bolder">
+      Please wait as we are processing your files..
+    </small>
+
+  </span>
+
+<!--  <span>-->
+<!--    Total : {{this.storageHelper.totalInBytes}}-->
+<!--    <br>-->
+<!--    Current : {{this.storageHelper.current}}-->
+<!--    <br>-->
+<!--    Length : {{this.totalFiles}}-->
+<!--    <br>-->
+<!--    Progess : {{this.storageHelper.getCurrentProgress() / this.totalFiles}}-->
+<!--  </span>-->
+</div>

@@ -1,0 +1,72 @@
+.container{
+  /*height: 520px;*/
+  margin: auto;
+  height: 100%;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  margin-bottom: 12%;
+}
+
+.container div{
+  margin: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  /*width: 250px;*/
+}
+
+
+.schedule-text{
+  width: 100%;
+  text-justify: distribute;
+  text-align: center;
+  word-wrap: break-word;
+}
+.otp-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.otp-container span:first-child{
+  padding: 0.5rem;
+  border-radius: 25px;
+  color: black;
+  border: 1px solid;
+  display: flex;
+  flex-direction: row;
+}
+
+.otp-container input{
+  color: inherit;
+  border: none;
+  text-align: center;
+  outline: none;
+  user-select: none;
+  font-weight: bolder;
+}
+.otp-container .error{
+  color: darkred;
+}
+.otp-container input[type="number"]{
+  -moz-appearance: textfield;
+}
+.bottom-send{
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  position: relative;
+  width: auto;
+  /*justify-content: center;*/
+}
+.bottom-send .submit{
+  border-radius: 20px;
+}
+.bottom-send button {
+  max-height: 42px;
+}

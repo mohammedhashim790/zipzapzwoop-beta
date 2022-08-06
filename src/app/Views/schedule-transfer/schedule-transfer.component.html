@@ -1,0 +1,47 @@
+<div class="container">
+  <div>
+    <span>
+      <h3 class="schedule-text primary-text-color">
+        Would you like to<br>schedule<br>your transfer?
+      </h3>
+    </span>
+
+    <span class="time-select">
+      <span class="time-select">
+        <select id="date-select-hour" (change)="timeSelected = true">
+          <ng-container *ngFor="let hrs of hrsRange();let index = index">
+            <option>{{hrs}}</option>
+          </ng-container>
+        </select>
+        <h5 for="date-select-hour">Hr(s)</h5>
+      </span>
+      <span class="time-select">
+        <select id="date-select-min" (change)="timeSelected = true">
+          <ng-container *ngFor="let hrs of minRange();let index = index">
+            <option>{{hrs}}</option>
+          </ng-container>
+        </select>
+        <h5 for="date-select-hour">Min(s)</h5>
+      </span>
+
+    </span>
+
+    <span @SlideUpDown style="margin: auto" *ngIf="timeSelected">
+      <a href="" (click)="timeSelected = false"><small>No, just send it.</small></a>
+    </span>
+
+  </div>
+
+  <button (click)="timeSelected = !timeSelected">Toggle</button>
+
+  <span class="bottom-send" (click)="ProceedToNext()">
+    <button type="submit" class="submit primary-color">
+<!--      <i class="fa fa-send"></i>-->
+      <h5 @SlideLeftRight *ngIf="!timeSelected;else scheduleWidget">No, I just want to send</h5>
+      <ng-template #scheduleWidget>
+        <h5 @SlideLeftRight>Schedule</h5>
+      </ng-template>
+    </button>
+  </span>
+
+</div>

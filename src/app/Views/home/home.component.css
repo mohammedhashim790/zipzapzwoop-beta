@@ -1,0 +1,231 @@
+
+.body{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  font-size: 1.2rem;
+}
+.carton{
+  height: auto;
+  margin: auto;
+  /*background-color: green;*/
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  box-shadow: 0 0 15px slategray;
+  /*padding: 2%;*/
+  position: relative;
+  gap: 5px;
+  max-height: 600px;
+  -ms-overflow-style: none;
+  /*overflow-x: hidden;*/
+  min-height: 400px;
+  transition: all;
+  transition-timing-function: ease-in;
+  transition-duration: 750ms;
+  /*height: 100%;*/
+  /*width: 30%;*/
+}
+.carton::-webkit-scrollbar {
+  display: none;
+}
+.drop-zone{
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #995700;
+  /*background-color: #00947b;*/
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  visibility: hidden;
+  z-index: 99999;
+  opacity: 0.8;
+  flex-direction: column;
+  place-items: center;
+  justify-content: center;
+}
+
+.drop-zone .egg-container{
+  display: flex;
+}
+.drop-zone .egg-container .egg-bottom{
+  width: 100px;
+  height: 100px;
+  animation: levitate;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+}
+@keyframes levitate {
+  0%{
+    transform: translateY(0);
+  }
+  50%{
+    transform: translateY(-5%);
+  }
+  100%{
+    transform: translateY(0%);
+  }
+}
+
+.drop-zone .content{
+  color: white;
+  font-weight: bolder;
+  display: flex;
+}
+.container-body{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+
+.select-files-container{
+  /*height: 520px;*/
+  margin: auto;
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  margin-bottom: 12%;
+}
+
+.carton input{
+  border: none;
+  border-bottom: solid 1px slategray;
+  user-select: none;
+  outline: none;
+  margin: 0.5rem auto;
+  width: 90%;
+}
+.carton .options{
+  display: flex;
+  width: 95%;
+  flex-direction: row-reverse;
+  gap: 15px;
+  font-size: 1.5rem;
+  position: absolute;
+  background: none;
+  z-index: 999;
+  left: 0;
+}
+.carton .options button{
+  font-size: inherit;
+  cursor: pointer;
+}
+.carton .options .active{
+  color: #995700;
+}
+
+.files{
+  /*max-height: 200px;*/
+  display: grid;
+  grid-auto-columns: 1fr;
+  margin-top: 1.5rem;
+
+}
+.files .file{
+  width: 100%;
+  margin: auto;
+  justify-content: space-between;
+  padding: 2%;
+  display: flex;
+  flex-direction: row;
+}
+.files .file button{
+  width: max-content;
+  height: max-content;
+  display: flex;
+  margin: auto;
+  cursor: pointer;
+}
+
+.recipient{
+  width: 85%;
+  margin: auto;
+  justify-content: space-between;
+  padding: 2%;
+  display: flex;
+  flex-direction: row;
+  border: 1px solid slategray;
+  background: #F5F5F5;
+  border-radius: 25px;
+}
+.recipient small{
+  width: 80%;
+  overflow: clip;
+}
+.recipient small:after{
+  width: 5px;
+  background: linear-gradient(0,white,whitesmoke);
+}
+
+.recipient button{
+  width: max-content;
+  height: max-content;
+  display: flex;
+  margin: auto;
+  cursor: pointer;
+}
+
+input{
+  padding: 5%;
+}
+
+.select-files{
+  width: 100%;
+  margin: auto;
+  min-height: 100px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  cursor: pointer;
+}
+.select-files >*{
+  cursor: pointer;
+}
+
+.select-files .plus-button{
+  padding: 2%;
+  color: inherit;
+  /*width: 30%;*/
+  background: none;
+  border: none;
+}
+.select-files .plus-button .plus{
+  width: 2.0rem;
+  height: 2.0rem;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  /*align-items: center;*/
+  margin: auto;
+  border-radius: 50%;
+  border-style: solid;
+  border-width: 1pt;
+  background-color: white;
+  border-color: #995700;
+  color: #995700;
+}
+.select-files button{
+  width: 70%;
+  background: none;
+  border: none;
+  text-align: start;
+  color: #707070;
+  font-size: 1.4rem;
+}
+
+.input-field > * {
+  font-size: 1.0rem;
+  outline: none;
+}
+
+@media screen and (max-width: 450px) {
+  .carton{
+    height: 100%;
+    width: 95%;
+  }
+}

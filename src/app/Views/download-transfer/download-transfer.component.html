@@ -1,0 +1,104 @@
+<div class="carton" [ngSwitch]="downloadState">
+
+  <span *ngSwitchDefault class="loader">
+  </span>
+  <ng-template [ngSwitchCase]="DownloadTransferUIState.LOADED">
+    <span @ScaleAndDisappear *ngIf="!passwordVerified ;else show"
+          class="password-container">
+      <span>
+        <h2>Title</h2>
+      </span>
+      <span class="message">
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis condimentum massa lectus, non hendrerit elit lacinia eu. Vestibulum ligula odio, tristique a augue a, auctor tincidunt nisl. Proin leo erat, pharetra sit amet velit sit amet, tincidunt viverra massa. Interdum et malesuada fames ac ante ipsum primis in faucibus. Suspendisse ac metus at dolor vulputate convallis. Donec non nunc rhoncus, semper libero et, pellentesque sapien. Cras dictum placerat lacus sed consectetur. Nulla non elementum orci, vitae pretium purus. Cras dapibus et enim eu elementum. Fusce ultrices mattis tellus eget pulvinar.
+        </p>
+      </span>
+      <span style="margin: 0.5rem !important;">
+        <button class="primary-app-button download-button">
+          Download
+        </button>
+      </span>
+      <span class="password-input">
+        <i class="fa fa-lock" style="font-size:36px"></i>
+        <small><b>The contents are protected.</b></small>
+        <input type="Password"
+               [formControl]="password"
+               [class.incorrect-password]="password.errors?.['verified'] && (password.dirty || password.touched)"
+               placeholder="Enter password"
+               (keydown.enter)="VerifyPassword()">
+      </span>
+    </span>
+    <ng-template #show>
+      <ng-container *ngIf="!this.redirect;else showMailInfo">
+        <span style="width: 100%">
+          <span>
+            <h2>{{transfer!.linkInfo!.Title}}</h2>
+          </span>
+          <span class="message">
+            <p>
+              {{transfer!.linkInfo!.Message}}
+            </p>
+          </span>
+          <span style="margin: 0.5rem !important;">
+            <button *ngIf="downloadTransferState!=DownloadTransferUIState.DOWNLOAD_PROCESSING;else loading" (click)="DownloadTransfer()" class="primary-app-button download-button">
+              Download
+            </button>
+            <ng-template #loading>
+              <button class="primary-app-button download-button" [disabled]="true">
+                <span class="loader"></span>
+              </button>
+            </ng-template>
+          </span>
+        </span>
+      </ng-container >
+      <ng-template #showMailInfo>
+        <span style="width: 100%">
+          <span>
+            <h2>{{transfer!.mailInfo!.Title}}</h2>
+          </span>
+          <span class="message">
+            <p>
+              {{transfer!.mailInfo!.Message}}
+            </p>
+          </span>
+          <span style="margin: 0.5rem !important;">
+            <button *ngIf="downloadTransferState!=DownloadTransferUIState.DOWNLOAD_PROCESSING;else loading" (click)="DownloadTransfer()" class="primary-app-button download-button">
+              Download
+            </button>
+            <ng-template #loading>
+              <button class="primary-app-button download-button" [disabled]="true">
+                <span class="loader"></span>
+              </button>
+            </ng-template>
+          </span>
+        </span>
+      </ng-template>
+
+    </ng-template>
+  </ng-template>
+  <ng-template [ngSwitchCase]="DownloadTransferUIState.NOT_FOUND">
+    <span class="not-found-container">
+      <img src="assets/gif/not-found-404.gif">
+      <h3 class="text" style="color: black">
+        PHP!!!
+      </h3>
+      <h4 class="text">
+        <small>
+          The files you are looking for has expired.
+        </small>
+      </h4>
+      <label class="text">
+        <h5>
+          <small>
+            Don't worry.
+          </small>
+          <small class="link primary-text-color" (click)="navigateTo('')">
+            Make another transfer.
+          </small>
+        </h5>
+      </label>
+
+    </span>
+  </ng-template>
+
+</div>

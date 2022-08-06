@@ -1,0 +1,190 @@
+
+<div id="drop-zoned"
+     class="drop-zone"
+     *ngIf="appSession.appState == AppState.LINK_SELECT || appSession.appState == AppState.MAIL_SELECT"
+     (dragenter)="onDragEnter($event)"
+     (dragover)="onDropOver($event)"
+     (dragleave)="onDropLeave($event)"
+     (drop)="onDropFile($event)">
+
+  <span class="egg-container">
+    <span class="egg-bottom">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 236.918 236.918" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 236.918 236.918">
+        <path d="m175.849,49.544c-18.232-31.023-39.686-49.544-57.391-49.544-17.86,0-39.375,18.523-57.55,49.551-17.756,30.313-28.358,65.538-28.358,94.224 0,29.327 8.702,53.505 25.167,69.922 15.235,15.191 36.239,23.221 60.741,23.221s45.507-8.029 60.742-23.221c16.464-16.417 25.167-40.595 25.167-69.922 0.001-28.619-10.66-63.845-28.518-94.231z"/>
+      </svg>
+    </span>
+  </span>
+  <span class="content">
+    <h1>Drop it Gently!</h1>
+  </span>
+
+</div>
+
+<div
+  class="select-files-container carton"
+  style="box-shadow: none;border:none;padding: 1.5rem;">
+  <span class="options">
+    <button class="empty-button" [class.active]="this.appSession.appTransferParams.passwordHelper.passwordEnabled" (click)="this.appSession.appTransferParams.passwordHelper.togglePassword()">
+      <ion-icon name="lock-closed"></ion-icon>
+    </button>
+    <button class="empty-button" [class.active]="appSession.appState == AppState.LINK_SELECT" (click)="onChangeState()">
+      <ion-icon name="link-outline"></ion-icon>
+    </button>
+    <button class="empty-button" (click)="ClearErrors()">
+      <ion-icon name="heart"></ion-icon>
+    </button>
+
+  </span>
+  <span
+    TooltipInfo
+    [message]="'You forgot to attach files?'"
+    [state]="appSession.formSubmitted && this.appSession.appFileTransfer.files.length == 0"
+    *ngIf="this.appSession.appFileTransfer.files.length<=0;else files" class="select-files">
+      <span class="plus-button">
+        <span class="plus">+</span>
+      </span>
+      <span style="width:100%;display: flex;flex-direction: column">
+        <button class="link" (click)="fileInput.click()">Select Files</button>
+        <small class="link" (click)="folderInput.click()" style="font-size: 0.8rem">or upload a folder</small>
+        <input #fileInput type="file" style="display: none" (change)="onFileSelected($event)" [multiple]="true">
+        <input #folderInput type="file" style="display: none" (change)="onFolderUpload($event)" webkitdirectory [multiple]="true"/>
+      </span>
+    </span>
+  <ng-template #files>
+    <span class="files">
+      <span
+        class="file"
+        *ngFor="let file of this.appSession.appFileTransfer.files;let index = index">
+        <ng-container *ngIf="this.appSession.appFileTransfer.getSize(file.files)!='0 Kb'">
+          <span style="flex-direction: column;width: 90%">
+            <small>{{file.name}}</small>
+            <h6>{{this.appSession.appFileTransfer.getSize(file.files)}}</h6>
+          </span>
+          <button (click)="this.removeFile(index)" class="empty-button">
+            <i class="fa fa-times" aria-hidden="true"></i>
+          </button>
+        </ng-container>
+      </span>
+      <span class="file" (click)="fileInput.click()">
+        <button (click)="fileInput.click()" class="empty-button">
+          <ion-icon name="add-circle" class="primary-text-color" style="font-size: 1.4rem"></ion-icon>
+        </button>
+        <input #fileInput type="file" style="display: none" (change)="onFileSelected($event)" [multiple]="true">
+        <span style="flex-direction: column;width: 90%">
+          <small class="link">Add more files</small>
+          <h6>{{this.appHelper.getTotalSize(this.appSession.appFileTransfer.files)}} remaining</h6>
+        </span>
+      </span>
+    </span>
+  </ng-template>
+
+
+  <span TooltipInfo
+        [state]="appSession.formSubmitted && appSession.appTransferParams.fromAddress.untouched"
+        [message]="'Email ID is invalid'"
+        class="input-field" @SlideUpDown *ngIf="appSession.appState == AppState.MAIL_SELECT">
+    <input id="email"
+           type="text"
+           class="value"
+           [class.error-input]="!appSession.appTransferParams.fromAddress.valid && (appSession.appTransferParams.fromAddress.dirty || appSession.appTransferParams.fromAddress.touched)"
+           [formControl]="appSession.appTransferParams.fromAddress" required>
+    <label
+           for="email" class="key">Your Email</label>
+  </span>
+  <ng-container *ngIf="appSession.appState == AppState.MAIL_SELECT">
+    <span
+      TooltipInfo
+      [message]="'Recipients are missing'"
+      [state]="appSession.formSubmitted && appSession.appTransferParams.recipients.length ==0"
+      *ngFor="let recipient of this.appSession.appTransferParams.recipients;let index = index" @SlideUpDown>
+      <span class="recipient">
+        <small [title]="recipient">{{recipient}}</small>
+        <button (click)="this.removeRecipients(index)" class="empty-button">
+          <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+      </span>
+    </span>
+  </ng-container>
+  <span
+    class="input-field"
+    TooltipInfo
+    [message]="'Please Enter Recipients'"
+    [state]="appSession.formSubmitted && (appSession.appTransferParams.recipient.untouched || appSession.appTransferParams.recipients.length==0)"
+    @SlideUpDown *ngIf="appSession.appState == AppState.MAIL_SELECT && this.appSession.appTransferParams.recipients.length<5">
+    <input id="recipients"
+           type="text"
+           class="value"
+           [formControl]="appSession.appTransferParams.recipient"
+           (keydown.enter)="onClickInputEnter()" (keydown.tab)="onClickInputEnter()" required>
+    <label for="recipients" class="key">Recipients</label>
+  </span>
+
+  <span class="input-field">
+    <input id="title" type="text" class="value"
+           [(ngModel)]="appSession.appTransferParams.title" required>
+    <label for="title" class="key">Title</label>
+  </span>
+
+  <span @SlideUpDown
+        TooltipInfo
+        [message]="'Password is required or you can disable this.'"
+        [state]="appSession.formSubmitted && appSession.appTransferParams.passwordHelper.password.untouched"
+        *ngIf="appSession.appTransferParams.passwordHelper.passwordEnabled"
+        class="input-field">
+    <input id="password" type="password" class="value" [formControl]="appSession.appTransferParams.passwordHelper.password" required>
+    <label for="password" class="key">Password</label>
+  </span>
+  <span class="input-field">
+    <textarea id="message"  type="text" class="value message" [(ngModel)]="appSession.appTransferParams.body" required></textarea>
+    <label for="message" class="key" style="transform: translate(5px,15px)">Message</label>
+  </span>
+
+
+  <div @fadeInOut *ngIf="errorInfo.errors?.['MAXIMUM_FILES_EXCEEDED']" class="info-container">
+    <span>
+      <h3>{{errorInfoParams.title}}</h3>
+      <h5>{{errorInfoParams.message}}</h5>
+      <button class="primary-app-button" (click)="ClearErrors()">
+        Okay
+      </button>
+    </span>
+  </div>
+
+  <div @fadeInOut *ngIf="errorInfo.errors?.['FILE_WITH_SAME_NAME']" class="info-container">
+    <span>
+      <h3>{{errorInfoParams.title}}</h3>
+      <h5>{{errorInfoParams.message}}</h5>
+      <button class="primary-app-button" (click)="ClearErrors()">
+        Okay
+      </button>
+    </span>
+  </div>
+
+  <div @fadeInOut *ngIf="errorInfo.errors?.['LIMIT_EXCEEDED']" class="info-container">
+    <span>
+      <h3>{{errorInfoParams.title}}</h3>
+      <h5>{{errorInfoParams.message}}</h5>
+      <button class="primary-app-button" (click)="ClearErrors()">
+        Okay
+      </button>
+    </span>
+  </div>
+
+</div>
+<span *ngIf="appSession.appState == AppState.MAIL_SELECT || appSession.appState == AppState.LINK_SELECT" class="bottom-send">
+  <button *ngIf="appSession.appState == AppState.MAIL_SELECT;else linkTransfer"
+          type="submit"
+          class="submit primary-color"
+          (click)="ProceedNext()">
+    <i class="fa fa-send"></i>
+    <h5>Send Email</h5>
+  </button>
+  <ng-template #linkTransfer>
+    <button type="submit"
+            class="submit primary-color"
+            (click)="ProceedNext()">
+      <i class="fa fa-send"></i>
+      <h5>Get Link</h5>
+    </button>
+  </ng-template>
+</span>

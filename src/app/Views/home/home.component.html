@@ -1,0 +1,58 @@
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4627765388632812"
+        crossorigin="anonymous"></script>
+<!-- Z3 Ads -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-4627765388632812"
+     data-ad-slot="5061126851"
+     data-ad-test="on"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<main class="body"
+      (dragenter)="onDragEnter($event)"
+      (dragover)="onDropOver($event)"
+      (drop)="onDropFile($event)">
+
+  <div class="carton">
+
+    <div class="container-body" [ngSwitch]="appSession.appState">
+      <transfer-select style="width: 100%" *ngSwitchDefault>
+      </transfer-select>
+
+      <schedule-transfer style="width: 100%" *ngSwitchCase="AppState.MAIL_SCHEDULE">
+
+      </schedule-transfer>
+
+      <transfer-uploading style="width: 100%;display: flex" *ngSwitchCase="AppState.MAIL_UPLOADING">
+      </transfer-uploading>
+      <transfer-uploading style="width: 100%;display: flex" *ngSwitchCase="AppState.LINK_UPLOADING">
+      </transfer-uploading>
+
+      <transfer-sent style="width: 100%;display: flex" *ngSwitchCase="AppState.MAIL_SENT"></transfer-sent>
+      <transfer-sent style="width: 100%;display: flex" *ngSwitchCase="AppState.LINK_SENT"></transfer-sent>
+
+      <verify-email style="width: 100%;display: flex" *ngSwitchCase="AppState.MAIL_VERIFY"></verify-email>
+
+    </div>
+
+<!--    <span *ngIf="appHelper.appState == AppState.MAIL_SELECT || appHelper.appState == AppState.LINK_SELECT" class="bottom-send">-->
+<!--      <button *ngIf="appHelper.appState == AppState.MAIL_SELECT;else linkTransfer" type="submit" class="submit primary-color" (click)="ProceedNext()">-->
+<!--        <i class="fa fa-send"></i>-->
+<!--        <h5>Send Email</h5>-->
+<!--      </button>-->
+<!--      <ng-template #linkTransfer>-->
+<!--        <button type="submit" class="submit primary-color" (click)="ProceedNext()">-->
+<!--          <i class="fa fa-send"></i>-->
+<!--          <h5>Get Link</h5>-->
+<!--        </button>-->
+<!--      </ng-template>-->
+<!--    </span>-->
+
+  </div>
+</main>
+
+

@@ -1,0 +1,46 @@
+<div class="container">
+
+  <div>
+    <span>
+      <h3 class="schedule-text primary-text-color">
+        A Verification code
+        <br>has been sent to <br>
+        <small><b>{{this.appSession.appTransferParams.fromAddress.value}}</b></small>
+      </h3>
+    </span>
+  </div>
+  <div>
+    <span class="otp-container">
+      <span>
+        <input placeholder="code" (keydown.enter)="validateOtp()" [formControl]="code" maxlength="6" (keypress)="onlyNumberKey($event)">
+        <button class="empty-button" (click)="resendOtp()" [class.disabled]="counter>0" [disabled]="counter>0" >
+          <i class="fa fa-repeat" aria-hidden="true"></i>
+        </button>
+      </span>
+      <span class="error" *ngIf="code.invalid && (code.dirty || code.touched)">
+        <h6 style="color: inherit" *ngIf="code.errors?.['required']">
+          Code is required
+        </h6>
+        <h6 style="color: inherit" *ngIf="code.errors?.['invalid']">
+          Code is invalid
+        </h6>
+        <h6 style="color: inherit" *ngIf="code.errors?.['expired']">
+          Code expired. Please try again.
+        </h6>
+
+      </span>
+    </span>
+  </div>
+
+
+  <span class="bottom-send" >
+    <button *ngIf="verificationState == VerificationState.UNVERIFIED;else loading"  type="submit" class="submit primary-color" (click)="validateOtp()">
+      <h4>verify</h4>
+    </button>
+    <ng-template #loading>
+      <button type="submit" class="submit primary-color loader">
+      </button>
+    </ng-template>
+  </span>
+
+</div>
