@@ -7,6 +7,8 @@ import {environment} from "../../../environments/environment";
 import * as JSZip from "jszip";
 import {saveAs} from "@progress/kendo-file-saver";
 
+
+
 // export enum StorageProcess{
 //   QUEUED,
 //   READY_TO_SYNC,
@@ -92,7 +94,7 @@ export class StorageHelper {
         progressCallback : (progress: any) =>{
           this.current=((this.iter) + (progress.loaded/progress.total));
           this.fileProgress[iter] = (progress.loaded/progress.total);
-          console.log("Loaded : " + this.currentInBytes);
+          console.log(this.current);
         },
       })
     } catch (e) {
@@ -123,38 +125,21 @@ export class StorageHelper {
     this.totalInBytes = files.reduce((value, file) => value + file?.size, 0);
     console.log(this.totalInBytes);
     this.fileProgress = Array(files.length).fill(0);
+    files = files.flat();
     if(files.length == 1){
       let file = files[0];
-      let key = this.getKey(this.transferName,this.filePathKey(file));
-      // this.storageState = StorageProcess.SYNCING;
+      let key = this.getKey(sessionId,this.filePathKey(file));
+      // let key = this.filePathKey(file);
       await this.UploadObject(key, file, this.iter);
-      // this.storageState = StorageProcess.SYNCED;
-      // this.storageState = StorageProcess.AVAILABLE_TO_QUEUE;
       return sessionId;
     }
-    // this.storageState = StorageProcess.READY_TO_SYNC;
 
-    let zipFile = await this.ZipObjects(files);
-
-    console.log(files);
-    console.log(zipFile);
-    // this.storageState = StorageProcess.COMPRESSING_OBJECTS;
-    let zip = await zipFile.generateAsync({
-      type: "arraybuffer", // changed from blob to arrayBuffer
-    },(update)=>{
-      console.log(update.percent);
-    });
-    // this.storageState = StorageProcess.SYNCING;
-    let key = this.getKey(sessionId,sessionId) + ".zip";
-    console.log("Uploading Data");
-    await this.UploadObject(this.transferName,zip,this.iter);
-
-    // for (this.iter = 0; this.iter < files.length; this.iter++) {
-    //   let file = files[this.iter];
-    //   let key = this.getKey(sessionId,this.filePathKey(file));
-    //   await this.UploadObject(key, file,this.iter);
-    // }
-    // this.storageState = StorageProcess.AVAILABLE_TO_QUEUE;
+    for (this.iter = 0; this.iter < files.length; this.iter++) {
+      let file = files[this.iter];
+      let key = this.getKey(sessionId,this.filePathKey(file));
+      // let key = this.filePathKey(file);
+      await this.UploadObject(key, file,this.iter);
+    }
     return sessionId;
   }
 

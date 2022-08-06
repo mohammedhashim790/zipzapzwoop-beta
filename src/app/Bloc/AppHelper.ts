@@ -118,9 +118,34 @@ export const AppAnimations = [
     transition(':increment', right),
     transition(':decrement', left),
   ]),
+  trigger("fadeInOut",[
+    transition("* => void",[
+      style({
+        opacity:1
+      }),
+      animate(duration, style({
+        opacity:0
+      }))
+    ]),
+    transition("void => *",[
+      style({
+        opacity:0
+      }),
+      animate(duration, style({
+        opacity:1
+      }))
+    ])
+  ])
 ]
 
 export abstract class AppHelper{
+
+  // SEQUENTIAL FILE LIMIT
+  // WHEN FOLDER IS DROPPED OR UPLOADED, ITS SUB DIRECTORIES MUST LESS THAN 150 NOS.
+  SeqFilesLimit: number = 3500;
+  get bytesInGigaBytes(): number {
+    return this._bytesInGigaBytes;
+  }
   get url(): string {
     return this._url;
   }
@@ -158,7 +183,9 @@ export abstract class AppHelper{
     return Array(n).fill(0).map((value, index) => index);
   }
 
-  private bytesInGigaBytes:number = 5368709120;
+  //2GB
+  private readonly _bytesInGigaBytes:number = (2**30) * 2 ;
+  // private readonly _bytesInGigaBytes:number = 5368709120;
 
 
   public getSizeInWords(size: number | any) {
@@ -173,7 +200,7 @@ export abstract class AppHelper{
   }
 
   public getTotalSize(nums:Array<IMap>){
-    let diff =  this.bytesInGigaBytes- nums.reduce((sum,value)=>sum+value.getSize(),0);
+    let diff =  this._bytesInGigaBytes - nums.reduce((sum, value)=>sum+value.getSize(),0);
     return this.getSizeInWords(diff);
   }
 

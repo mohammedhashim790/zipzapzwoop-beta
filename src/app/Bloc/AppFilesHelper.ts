@@ -1,4 +1,5 @@
 import {AppHelper} from "./AppHelper";
+import {AppError, AppErrorCode} from "./AppErrors/AppError";
 
 export class IMap{
   name:string;
@@ -15,7 +16,7 @@ export class IMap{
   getSize() {
     let data = [this.files];
     // if(this.files instanceof Array)
-      return data.flat().reduce((s:number,v:File)=>s+v.size,0);
+    return data.flat().reduce((s:number,v:File)=>s+v.size,0);
     // else
     //   return this.files.size;
   }
@@ -31,12 +32,26 @@ export class AppFilesHelper {
   private appHelper:AppHelper = new class extends AppHelper {};
 
 
+  inLimitBounds(file:File):boolean{
+    let diff = this.LimitRemaining();
+    if(file.size<diff)
+      return true;
+    return false;
+  }
 
-  AddFile(file:File){
-    let found = this.FileExists(file.name);
-    if(found!=-1)
-      throw new Error("File with the same name exists.");
-    this.files.push(new IMap(file.name,file,false));
+  inLimit():boolean{
+    let size = this.TotalSize();
+    if(size<this.appHelper.bytesInGigaBytes)
+      return true;
+    return false;
+  }
+
+  TotalSize(){
+    return this.files.reduce((sum, value)=>sum+value.getSize(),0);
+  }
+
+  LimitRemaining(){
+    return this.appHelper.bytesInGigaBytes - this.TotalSize();
   }
 
   FileExists(fileName:string){
@@ -44,13 +59,39 @@ export class AppFilesHelper {
     return index;
   }
 
+  AddFile(file:File){
+    let found = this.FileExists(file.name);
+    if(found!=-1)
+      throw new AppError(AppErrorCode.FILE_WITH_SAME_NAME, "File with the same name exists.");
+
+    if(!(this.inLimitBounds(file))){
+      throw new AppError(AppErrorCode.LIMIT_EXCEEDED,"File Transfer Limit Exceeded");
+    }
+
+
+    this.files.push(new IMap(file.name,file,false));
+  }
+
   AddToDirectory(directoryName:string,file:File){
     let index = this.DirectoryExists(directoryName);
     console.log("Directory" + directoryName + " Found at " + index);
-    if(index == -1){
-      throw new Error("Folder is not found in the list.");
+    // if(index == -1){
+    //   throw new AppError(AppErrorCode.FOLDER_NOT_FOUND, "Folder is not found in the list.");
+    // }
+    if(!(this.inLimitBounds(file))){
+      this.files.splice(index,1)
+      throw new AppError(AppErrorCode.LIMIT_EXCEEDED,"File Transfer Limit Exceeded");
     }
+
+    if(this.files[index].files.length>=this.appHelper.SeqFilesLimit){
+      this.files.splice(index,1);
+      throw new AppError(AppErrorCode.MAXIMUM_FILES_EXCEEDED, "Maximum File in a folder exceeded. " +
+        `Please zip ${directoryName} and upload the zip file for your ease.`)
+    }
+
+
     this.files[index].files.push(file);
+
   }
 
   DirectoryExists(directoryName:string){
@@ -95,6 +136,16 @@ export class AppFilesHelper {
 
   ListFiles() {
     console.log(this.files);
+  }
+
+  RemoveDirectory(directoryName: string) {
+    let index = this.DirectoryExists(directoryName);
+    console.log("Directory" + directoryName + " Found at " + index);
+    if(index == -1){
+      return;
+      // throw new Error("Folder is not found in the list.");
+    }
+    this.files.splice(index,1);
   }
 }
 

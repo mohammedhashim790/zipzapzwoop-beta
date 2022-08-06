@@ -2,7 +2,6 @@ import * as JSZip from "jszip";
 
 
 export class FileProcess{
-
   index:number;
   loaded:number;
   total:number;

@@ -47,7 +47,7 @@ export class AppSession{
 
   constructor() {
     this.sessionId = uuidv4();
-    this.appState = AppState.LINK_SELECT;
+    this.appState = AppState.MAIL_SELECT;
     this.appTransferParams = new AppTransferParams();
     this.appFileTransfer = new AppFilesHelper();
   }
