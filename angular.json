@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ZipZapZwoopBeta": {
+    "ZipZapZwoop": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/zip-zap-zwoop-beta",
+            "outputPath": "dist/zip-zap-zwoop",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -27,6 +27,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/aos/dist/aos.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -37,7 +38,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -68,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ZipZapZwoopBeta:build:production"
+              "browserTarget": "ZipZapZwoop:build:production"
             },
             "development": {
-              "browserTarget": "ZipZapZwoopBeta:build:development"
+              "browserTarget": "ZipZapZwoop:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -79,7 +80,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ZipZapZwoopBeta:build"
+            "browserTarget": "ZipZapZwoop:build"
           }
         },
         "test": {
@@ -102,5 +103,5 @@
       }
     }
   },
-  "defaultProject": "ZipZapZwoopBeta"
+  "defaultProject": "ZipZapZwoop"
 }

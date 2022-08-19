@@ -1,0 +1,14 @@
+<fieldset *ngIf="showing" [disabled]="disabled" class="background-container background-border-none" @onOpen>
+  <section class="container" >
+    <div class="header primary-color">
+      <label>{{widgetTitle}}</label>
+      <button class="empty-button" (click)="this.CloseWindow()">
+        <ion-icon name="close-circle"></ion-icon>
+      </button>
+    </div>
+    <section style="display: flex;margin: auto 15px">
+      <ng-content></ng-content>
+    </section>
+  </section>
+
+</fieldset>

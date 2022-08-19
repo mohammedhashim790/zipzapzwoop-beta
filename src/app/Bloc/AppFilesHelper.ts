@@ -1,4 +1,4 @@
-import {AppHelper} from "./AppHelper";
+import {AppHelper, printer} from "./AppHelper";
 import {AppError, AppErrorCode} from "./AppErrors/AppError";
 
 export class IMap{
@@ -74,7 +74,7 @@ export class AppFilesHelper {
 
   AddToDirectory(directoryName:string,file:File){
     let index = this.DirectoryExists(directoryName);
-    console.log("Directory" + directoryName + " Found at " + index);
+    printer.print("Directory" + directoryName + " Found at " + index);
     // if(index == -1){
     //   throw new AppError(AppErrorCode.FOLDER_NOT_FOUND, "Folder is not found in the list.");
     // }
@@ -103,7 +103,7 @@ export class AppFilesHelper {
     if(this.files.findIndex((value => value.name == name))!=-1){
       throw new Error("A Folder exists with same Name.")
     }
-    console.log("Created Folder "+ name);
+    printer.print("Created Folder "+ name);
     this.files.push(new IMap(name,[],true));
   }
 
@@ -119,10 +119,10 @@ export class AppFilesHelper {
       size = this.appHelper.getSizeInWords(file.reduce((sum,value)=>sum+value.size,0));
 
     }else{
-      // console.log("SingleSize")
+      // printer.print("SingleSize")
       size = this.appHelper.getSizeInWords(file.size);
     }
-    // console.log("Size " + size);
+    // printer.print("Size " + size);
     return size;
   }
 
@@ -135,12 +135,12 @@ export class AppFilesHelper {
   }
 
   ListFiles() {
-    console.log(this.files);
+    printer.print(this.files);
   }
 
   RemoveDirectory(directoryName: string) {
     let index = this.DirectoryExists(directoryName);
-    console.log("Directory" + directoryName + " Found at " + index);
+    printer.print("Directory" + directoryName + " Found at " + index);
     if(index == -1){
       return;
       // throw new Error("Folder is not found in the list.");

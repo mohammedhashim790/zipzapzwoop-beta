@@ -1,5 +1,5 @@
 {
-  "name": "zip-zap-zwoop-beta",
+  "name": "zip-zap-zwoop",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -34,6 +34,7 @@
     "@progress/kendo-file-saver": "^1.1.1",
     "@types/archiver": "^5.3.1",
     "adm-zip": "^0.5.9",
+    "aos": "^2.3.4",
     "archiver": "^5.3.1",
     "aws-amplify": "^4.3.27",
     "aws-sdk": "^2.1180.0",
@@ -44,6 +45,7 @@
     "jszip": "^3.2.2",
     "jszip-utils": "^0.1.0",
     "ng-circle-progress": "^1.6.0",
+    "ng2-adsense": "^11.0.0",
     "node-stream-zip": "^1.15.0",
     "node-zip": "^1.1.1",
     "process": "^0.11.10",
@@ -64,6 +66,7 @@
     "@angular-devkit/build-angular": "^13.3.9",
     "@angular/cli": "~13.2.5",
     "@angular/compiler-cli": "~13.2.0",
+    "@types/aos": "^3.0.4",
     "@types/jasmine": "~3.10.0",
     "@types/jszip": "^3.4.1",
     "@types/node": "^12.20.55",

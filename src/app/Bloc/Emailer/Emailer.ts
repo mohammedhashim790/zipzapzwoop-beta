@@ -1,5 +1,6 @@
-import {AppHelper} from "../AppHelper";
+import {AppHelper, printer} from "../AppHelper";
 import {HttpClient, HttpHeaders, HttpXhrBackend} from "@angular/common/http";
+import {Epoch} from "aws-sdk/clients/ecr";
 
 export interface EmailParams{
   DownloadUrl: string;
@@ -12,6 +13,8 @@ export interface EmailParams{
   password:string
 }
 
+
+
 export enum ErrorCode {
   OK=200,
   INVALID_CODE=230,
@@ -23,7 +26,9 @@ export enum EmailEpitome{
   DELIVERY = "DELIVERY",
   NOTIFY = "NOTIFY",
   ACKNOWLEDGE = "ACKNOWLEDGE",
-  VERIFY = "VERIFY"
+  VERIFY = "VERIFY",
+  SCHEDULE="SCHEDULE",
+  REVIEW ="REVIEW"
 }
 
 export interface SesData{
@@ -33,6 +38,8 @@ export interface SesData{
     VerifyEmailParams?:VerifyEmailParams;
     NotifyEmailParams?:NotifyEmailParams;
     DeliveryTransferEmailParams?:DeliveryTransferEmailParams;
+    ScheduleDeliveryTransferEmailParams?:ScheduleDeliveryTransferEmailParams;
+    SendReviewParams?:SendReviewParams;
     RequestTime: string
   }
 }
@@ -55,12 +62,30 @@ export type NotifyEmailParams={
   ToAddress:string
 }
 
+export type ScheduleDeliveryTransferEmailParams={
+  ScheduledAt:Epoch,
+  TransferSent:Boolean,
+  EmailParams:DeliveryTransferEmailParams
+}
+
+export type SendReviewParams={
+  name?:string,
+  message:string
+}
+
 export type DeliveryTransferEmailParams={
   SessionId: string,
   DownloadUrl:string,
   MailInfo: MailInfo,
   passwordEnabled: boolean,
-  password: string
+  password: string,
+  FileParams:{
+    Password: string,
+    PasswordEnabled: boolean,
+    FilesLength:number,
+    Expiry: Date,
+    FilesSize:string
+  }
 }
 
 export type MailInfo={
@@ -133,34 +158,8 @@ export class Emailer{
     return this._instance;
   }
 
-  CreateTransferEmailBody(emailParams:EmailParams){
-    let params:SesData = {
-      SesData:{
-        EmailEpitome:EmailEpitome.DELIVERY,
-        DeliveryTransferEmailParams: {
-          SessionId: emailParams.SessionId,
-          MailInfo: {
-            FromEmail: emailParams.fromAddress,
-            Recipients: emailParams.recipients,
-            Cc: [],
-            Bcc: [],
-            Subject: `${emailParams.fromAddress} has shared files with you`,
-            Title: emailParams.title,
-            Message: emailParams.body
-          },
-          passwordEnabled: emailParams.passwordEnabled,
-          DownloadUrl:emailParams.DownloadUrl,
-          password: emailParams.password
-        },
-        RequestTime:new Date(Date.now()).toISOString()
-      }
-    }
-
-    return params;
-  }
-
   sendFileEmail(params:SesData){
-    console.log(JSON.stringify(params));
+    printer.print(JSON.stringify(params));
     let headers  =new HttpHeaders();
     headers.append('Content-Type', 'application/json');
     headers.append('Access-Control-Allow-Origin', '*')

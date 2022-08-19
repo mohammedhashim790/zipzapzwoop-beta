@@ -51,6 +51,8 @@ window['process'] = process;
 
 (window as any)['global'] = window;
 (window as any).global = window;
+(window as any)['adsbygoogle'] = ((window as any)['adsbygoogle'] || []).push({});
+
 global.Buffer = global.Buffer || require('buffer').Buffer;
 // (window as any).process = {
 //   env: { DEBUG: undefined },

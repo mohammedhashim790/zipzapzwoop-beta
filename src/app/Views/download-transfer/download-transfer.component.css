@@ -1,7 +1,7 @@
 .carton{
   min-width: 300px;
   /*max-width: 20%;*/
-  min-height: 400px;
+  min-height: 500px;
   width: min-content;
   padding-left: 1.2rem;
   padding-right: 1.2rem;
@@ -11,10 +11,14 @@
   place-items: center;
   flex-direction: column;
   margin: auto;
-  /*background: #f4f4f4;*/
-  position: relative;
   overflow: hidden;
   box-shadow: 0 0 15px slategrey;
+  top: 50%;
+  left: 5%;
+  transform: translateY(-50%);
+  position: fixed;
+  z-index: 1000;
+
 }
 .carton > *{
 
@@ -42,11 +46,23 @@
   padding: 1.2rem;
   justify-content: unset;
   align-items: unset;
+  background: #f9f9f9;
+  border-radius: 5px;
+  margin: 2.0rem;
 }
 p{
   text-justify: inter-word;
   word-wrap: break-word;
   text-align: justify;
+  font-weight: bolder;
+}
+p:before{
+  content: "“";
+  margin: 0 5px;
+}
+p:after{
+  content: "”";
+  margin: 0 5px;
 }
 
 .password-container{
@@ -118,6 +134,11 @@ p{
 .not-found-container .text{
   color: #7a7a7a;
   /*margin: 1.2rem;*/
+}
+
+.download-button-container{
+  width: 100%;
+  margin: 2.0rem !important;
 }
 
 

@@ -17,9 +17,11 @@ export class S3ObjectParams implements S3Object{
   key: string;
   region: string = aws_exports["aws_user_files_s3_bucket_region"];
   relativePath: string;
-  constructor(key: string,relativePath:string) {
+  size: string;
+  constructor(key: string,relativePath:string, size: string) {
     this.key = key;
     this.relativePath = relativePath;
+    this.size = size;
   }
 }
 

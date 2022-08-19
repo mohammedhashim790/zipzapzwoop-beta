@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {AppHelper, AppState} from "../../Bloc/AppHelper";
+import {AppHelper, AppState, printer} from "../../Bloc/AppHelper";
 import {StorageHelper} from "../../Bloc/Storage/Storage";
-import {AppFilesHelper} from "../../Bloc/AppFilesHelper";
 import {CreateSession, S3ObjectParams} from "../../Bloc/API/API";
 import {CreateSessionInput, LinkInfoInput, MailInfoInput} from "../../API.service";
-import {MailInfo, Session} from "../../../models";
+import {Session} from "../../../models";
 import {AppSession} from "../../Bloc/Session/Session";
 import {Router} from "@angular/router";
-import {DeliveryTransferEmailParams, Emailer} from "../../Bloc/Emailer/Emailer";
+import {Emailer} from "../../Bloc/Emailer/Emailer";
+import {AppError, AppErrorCode} from "../../Bloc/AppErrors/AppError";
 
 
 export enum TransferUploadState{
@@ -44,6 +44,8 @@ export class TransferUploadingComponent implements OnInit {
   private fileProgress:Array<number> = [];
 
   private emailer:Emailer = Emailer.getInstance();
+
+
   // StorageProcess = StorageProcess;
 
   constructor(public appSession:AppSession,
@@ -55,59 +57,84 @@ export class TransferUploadingComponent implements OnInit {
   ngOnInit(): void {
     this.storageHelper.reset();
     this.state = TransferUploadState.ENGINE_STARTING;
+    // this.state = TransferUploadState.ENGINE_STARTED;
     this.OnStart();
   }
 
   private async OnStart() {
     try{
       let data = this.appSession.appFileTransfer.files.map((file)=>file.files);
-      console.log("Files to upload");
-      console.log(data.flat().length);
+      if(data.length == 0)
+        throw new AppError(AppErrorCode.NO_FILES_AVAILABLE,"File list is empty")
+      printer.print("Files to upload");
+      printer.print(data.flat().length);
       this.totalFiles = data.flat().length;
-      let sessionId = await this.CreateSessionApi(data.flat());
+
+      let files = this.flattenArray(data);
+
+
+      let sessionId = await this.CreateSessionApi(files);
+
+
       this._state = TransferUploadState.ENGINE_STARTED;
-      let files = data.flat();
+
+      printer.print("Unsorted");
+      printer.print(files);
+
+      files = files.sort((file1,file2)=> file1.size - file2.size);
+
+      printer.print("sorted");
+      printer.print(files);
 
       let res = await this.storageHelper.UploadObjects(
-        data.flat(),
+        files,
         sessionId?.id
       );
-      console.log("Uploaded and the session ID is : ");
-      console.log(sessionId?.id);
+      printer.print("Uploaded and the session ID is : ");
+      printer.print(sessionId?.id);
       this.ProceedToNext();
 
     }catch (e){
       console.error(e);
-      this._state = TransferUploadState.ENGINE_CORRUPTED;
+      // this._state = TransferUploadState.ENGINE_CORRUPTED;
     }
   }
 
+  flattenArray(arr:Array<any>):Array<any> {
+    return arr.reduce((flat, toFlatten) => {
+      return flat.concat(Array.isArray(toFlatten) ? this.flattenArray(toFlatten) : toFlatten);
+    }, []);
+  }
+
   getProgress(){
-    // console.log(`${value}%`);
     let value = this._getProgress();
-    return `${Math.floor(value*100)}%`;
+    // let value = 0.5;
+    return `${Math.floor(value*100)}`;
   }
 
   _getProgress(){
-    return this.storageHelper.getCurrentProgress() / this.totalFiles
+    return this.storageHelper.TotalProgress/this.storageHelper.totalSize;
+    // return this.storageHelper.getCurrentProgress() / this.totalFiles
   }
 
 
   getBorderWidth() {
-    let value = Math.floor((this._getProgress()));
+    let value = (this._getProgress());
+    printer.print("Border Width  " + Math.round(value*100)) ;
     if(Math.round(value*100)<25){
-      return "4px dashed";
+      return "4px dashed !important";
     }else if(Math.round(value*100)<50){
-      return "3px dashed";
+      return "3px dashed !important";
     }else if(Math.round(value*100)<90){
-      return "2px dashed";
+      return "2px dashed !important";
     }else{
-      return "2px solid"
+      return "2px solid !important"
     }
   }
 
   private async CreateSessionApi(files: Array<File>) {
-    let s3Objects = files.map((file => new S3ObjectParams(file.name,file.webkitRelativePath)));
+    let s3Objects = files.map((file =>
+      new S3ObjectParams(file.name,file.webkitRelativePath,file.size.toString())));
     // let s3Objects = files.map((file => new S3ObjectParams(file.webkitRelativePath,file.webkitRelativePath)));
     let sessionParams: CreateSessionInput;
     if(this.appSession.appState == AppState.LINK_UPLOADING) {
@@ -120,9 +147,11 @@ export class TransferUploadingComponent implements OnInit {
       sessionParams = {
         id:this.appSession.sessionId,
         files: s3Objects,
+        fileSize:this.appHelper.getTotalSize(this.appSession.appFileTransfer.files).toString(),
         password: (this.appSession.appTransferParams.passwordHelper)?this.appSession.appTransferParams.passwordHelper.password.value:"",
         passwordProtected:this.appSession.appTransferParams.passwordHelper.passwordEnabled,
         shortUrl:this.shortUrl,
+        expiry:this.appHelper.getExpiryDate(),
         linkInfo:linkInfo
       };
     }else{
@@ -133,11 +162,14 @@ export class TransferUploadingComponent implements OnInit {
         Title:this.appSession.appTransferParams.title,
         Message:this.appSession.appTransferParams.body
       }
+
       sessionParams = {
         id:this.appSession.sessionId,
         files:s3Objects,
+        fileSize:this.appHelper.getTotalSize(this.appSession.appFileTransfer.files).toString(),
         password:(this.appSession.appTransferParams.passwordHelper)?this.appSession.appTransferParams.passwordHelper.password.value:"",
         passwordProtected:this.appSession.appTransferParams.passwordHelper.passwordEnabled,
+        expiry:this.appHelper.getExpiryDate(),
         mailInfo:mailInfo
       }
     }
@@ -157,12 +189,17 @@ export class TransferUploadingComponent implements OnInit {
   private async ProceedToNext() {
     setTimeout(async () => {
       if (this.appSession.appState == AppState.MAIL_UPLOADING) {
-        console.log(this.appSession.getEmailParams());
-        let email = this.emailer.CreateTransferEmailBody(this.appSession.getEmailParams());
-        console.log(email);
+        this.appSession.appTransferParams.scheduleTransfer = false;
+        if(this.appSession.appTransferParams.scheduleTransfer){
+          printer.print("Sending Instant Mail");
+        }else{
+          printer.print("Mail Scheduled at " + this.appSession.appTransferParams.scheduledAt);
+        }
+        let email = this.appSession.CreateTransferEmailBody(this.appSession.getEmailParams());
+        printer.print(JSON.stringify(email));
         await this.emailer.sendFileEmail(email).toPromise().then((res)=>{
-          console.debug(res);
-          console.log("Mail Sent");
+          printer.print(res);
+          printer.print("Transfer Created");
         });
         this.appSession.appState = AppState.MAIL_SENT;
       } else if (this.appSession.appState == AppState.LINK_UPLOADING)

@@ -1,1 +1,99 @@
-<router-outlet></router-outlet>
+<floating-widget #ReviewBox
+                 (onClose)="this.reviewForm.reset()"
+                 [widgetTitle]="'Review'">
+
+  <form class="review-box" [formGroup]="reviewForm">
+    <h2 style="margin: 4%">
+      Honest Comments <i class="fa fa-hand-peace-o" aria-hidden="true"></i>
+    </h2>
+    <input type="text" placeholder="Name (Optional)" formControlName="name"/>
+    <textarea placeholder="Comments " formControlName="message"></textarea>
+    <button class="primary-app-button"
+            [class.disabled]="!reviewForm.valid"
+            (click)="SendReview()"
+            [disabled]="!reviewForm.valid">
+      <i class="fa fa-envelope" aria-hidden="true"></i>
+      <label>Send</label>
+    </button>
+    <small id="OkayReview" #OkayReview style="display: none;color: green">Thank you for using our service.</small>
+  </form>
+
+</floating-widget>
+
+<div style="width: 100vw;height: 100vh" (dragenter)="onDragEnter($event)">
+  <div @ScaleAndDisappear *ngIf="!tncAccepted" class="tnc-container">
+    <b style="color: #ff6262;font-size: 4.0vh;position: absolute;top: 2%">
+      *This a Beta edition*
+    </b>
+    <p style="font-size: 4.0vh">
+      Hey There Sender!
+      <br>
+      Welcome to <b>zipzapzwoop.com</b>
+      <br>
+      We are happy to serve you!
+      <br>
+      <br>
+      <label style="font-size: 3.0vh">
+        Please accept
+        <a
+          style="color: white !important;text-decoration: none;"
+          target="_blank"
+          href="https://www.termsandconditionsgenerator.com/live.php?token=CPP2iatj3plDohr8CCMCKGYiNE65O1go"
+          class="link">T&C</a>
+        and
+        <a
+          style="color: white !important;text-decoration: none;"
+          target="_blank"
+          href="https://www.privacypolicygenerator.info/live.php?token=DX96xTeoW2F8ETiwsGNiGdnSxK1I5bqA"
+          class="link">Privacy Policy</a>
+        to test our service.</label>
+    </p>
+    <span>
+      <button (click)="Accepted()">
+        <h3>Accept</h3>
+      </button>
+    </span>
+  </div>
+
+
+  <div class="ad-banners" data-aos="fade-in">
+    <span class="test-mode" data-aos="fade-in">
+      <h3>Beta Version V1</h3>
+    </span>
+    <div class="content" data-aos="fade-up" data-aos-duration="1500">
+      <h1 >
+        <b>zipzapzwoop.com</b>
+      </h1>
+      <h4>
+        is always free.
+        <br>
+      </h4>
+      <ul class="point-ref" data-aos="fade-up" data-aos-delay="50" data-aos-duration="1500">
+        <li>
+          No Upfront Cost
+        </li>
+        <li>
+          You can send upto 5 GB of files for free.
+        </li>
+        <li>
+          Password Protect your transfer
+        </li>
+        <li>
+          Fast and easy download
+        </li>
+        <li>
+          Get a link or Email your Transfer
+        </li>
+      </ul>
+      <span data-aos="fade-up" data-aos-delay="50" data-aos-duration="1500">
+        <a class="link" (click)="ReviewBox.Show()">
+          Share with us your experience about the product
+        </a>
+      </span>
+    </div>
+  </div>
+
+  <fieldset class="empty-button" [disabled]="!tncAccepted">
+    <router-outlet></router-outlet>
+  </fieldset>
+</div>

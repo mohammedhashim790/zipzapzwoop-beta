@@ -22,6 +22,11 @@ import {CopyClipboardDirective} from "./Directives/CopyClipboardDirective/copy-c
 import { DownloadTransferComponent } from './Views/download-transfer/download-transfer.component';
 import {AppSession} from "./Bloc/Session/Session";
 import { TooltipInfoDirective } from './Directives/TooltipInfo/tooltip-info.directive';
+import { GoogleAdsenseComponent } from './Views/google-adsense/google-adsense.component';
+import { PolicyViewerComponent } from './Views/policy-viewer/policy-viewer.component';
+import {DatePipe} from "@angular/common";
+import {FloatingWidgetComponent} from "./Directives/floating-widget/floating-widget.component";
+import {environment} from "../environments/environment";
 
 Amplify.configure(aws_exports)
 Auth.configure(aws_exports);
@@ -39,7 +44,11 @@ API.configure(aws_exports)
     TransferSelectComponent,
     CopyClipboardDirective,
     DownloadTransferComponent,
-    TooltipInfoDirective
+    TooltipInfoDirective,
+    GoogleAdsenseComponent,
+    PolicyViewerComponent,
+    FloatingWidgetComponent,
+
   ],
     imports: [
       BrowserModule,
@@ -49,8 +58,17 @@ API.configure(aws_exports)
       BrowserAnimationsModule,
       ReactiveFormsModule
     ],
-  providers: [StorageHelper,HttpClient,AppSession],
+  providers: [StorageHelper,HttpClient,AppSession,DatePipe],
   schemas:[CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {
+
+  constructor() {
+    if(environment.production){
+      console.log = ()=>{};
+      console.debug = ()=>{};
+    }
+  }
+
+}

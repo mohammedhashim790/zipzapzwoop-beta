@@ -6,7 +6,7 @@ import {AppFilesHelper, IMap} from "./AppFilesHelper";
 import {animate, group, query, state, style, transition, trigger} from "@angular/animations";
 import ShortUniqueId from "short-unique-id";
 import {Router} from "@angular/router";
-
+import {environment} from "../../environments/environment";
 
 
 const short = require('short-uuid');
@@ -25,6 +25,8 @@ export enum AppState{
 }
 
 export const duration = '250ms ease-in';
+
+export const windowTnCKey = "z3session";
 
 const left = [
   query(':enter, :leave', style({ }), { optional: true }),
@@ -154,16 +156,13 @@ export abstract class AppHelper{
     this._url = value;
   }
 
-  // public appState: AppState;
 
-  private _url:string = 'https://qqydelt4mb.execute-api.us-east-1.amazonaws.com/default/SampleEmailSendUsingCloudWatch';
+  private _url:string = environment.emailApi;
 
   private readonly translator = short();
   private readonly shortUuid = new ShortUniqueId({length:10});
 
   constructor() {
-    // this.appState = AppState.MAIL_SELECT;
-    // this.appState = AppState.MAIL_VERIFY;
   }
 
 
@@ -184,8 +183,14 @@ export abstract class AppHelper{
   }
 
   //2GB
-  private readonly _bytesInGigaBytes:number = (2**30) * 2 ;
+  // private readonly _bytesInGigaBytes:number = (2**30) * 2 ;
+
+  //5GB
+  private readonly _bytesInGigaBytes:number = (2**30) * 5 ;
   // private readonly _bytesInGigaBytes:number = 5368709120;
+
+
+  public readonly expiryDay:number = 7;
 
 
   public getSizeInWords(size: number | any) {
@@ -199,86 +204,69 @@ export abstract class AppHelper{
     }
   }
 
-  public getTotalSize(nums:Array<IMap>){
-    let diff =  this._bytesInGigaBytes - nums.reduce((sum, value)=>sum+value.getSize(),0);
+  public getTotalSizeRemaining(nums:Array<IMap>){
+    let diff =  this._bytesInGigaBytes - this.getTotalSize(nums);
     return this.getSizeInWords(diff);
   }
 
+  public getTotalSize(nums:Array<IMap>){
+    return nums.reduce((sum, value)=>sum+value.getSize(),0);
+  }
 
-  public EmbedTextToWebTemplate(body:string,
-                                fromAddress:string,
-                                sessionId:string):string{
-    return `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title></title>
-      <style type="text/css">
-        .body{
-          width: 100%;
-          height: 100%;
-          padding: 2%;
-          justify-content: center;
-          align-items: center;
-        }
+  addDate(date1:Date ,date2:Date | number){
+    if(date2 instanceof Date){
+      date1.setDate(date1.getDate() + date2.getDate());
+    }else{
+      date1.setDate(date1.getDate() + date2);
+    }
+    return date1;
+  }
 
-        .container{
-          width: 50%;
-          height: 100%;
-          border-radius: 5px;
-          border: none;
-          justify-content: center;
-          margin: auto;
-          display: grid;
-        }
+  getExpiryDate(){
+    return this.ConvertToEpochInSeconds((this.addDate(new Date(),this.expiryDay).getTime()));
+  }
 
-        .container > *{
-          padding: 2%;
-          margin: auto;
-          justify-content: center;
-        }
-        .title{
-          font-size: 1.0rem;
-          font-weight: bold;
-        }
-        .content{
-          font-size: 1.2rem;
-          background-color: wheat;
-        }
-        .download-button{
-          padding: 2%;
-          border-radius: 2em;
-          background-color: darkred;
-          border: none;
-          color: white;
-          font-size: 1.5rem;
-        }
-
-      </style>
-    </head>
-    <body>
-      <div class="body">
-        <div class="container">
-          <span class="title">${fromAddress} has shared files with you</span>
-          <span class="content">
-            ${body}
-          </span>
-          <span>
-            <button class="download-button">
-              Download
-            </button>
-          </span>
-          <span>
-            <a href="">${sessionId}</a>
-          </span>
-        </div>
-      </div>
-
-    </body>
-    </html>`.toString();
+  ConvertToEpochInSeconds(value:number){
+    return Math.floor(value/1000);
   }
 
   getDownloadUrl(SessionId: string) {
-    return `${window.location.href.split("http://")[1]}/download?id=${SessionId}&redirect=true&notify=true`;
+    if(environment.production)
+      return `${window.location.hostname}/download?id=${SessionId}&redirect=true&notify=true`;
+    return `${window.location.host}/download?id=${SessionId}&redirect=true&notify=true`;
+  }
+
+  DownloadName() {
+    return "zipzapzwoop_transfer_" + new Date(Date.now()).toLocaleDateString().replace("/","_");
+  }
+
+  public getBrowserName() {
+    const agent = window.navigator.userAgent.toLowerCase()
+    switch (true) {
+      case agent.indexOf('edge') > -1:
+        return 'edge';
+      case agent.indexOf('opr') > -1 && !!(<any>window).opr:
+        return 'opera';
+      case agent.indexOf('chrome') > -1 && !!(<any>window).chrome:
+        return 'chrome';
+      case agent.indexOf('trident') > -1:
+        return 'ie';
+      case agent.indexOf('firefox') > -1:
+        return 'firefox';
+      case agent.indexOf('safari') > -1:
+        return 'safari';
+      default:
+        return 'other';
+    }
+  }
+
+}
+
+
+export class printer{
+  static print(message:any){
+    if(!environment.production){
+      console.debug(message);
+    }
   }
 }

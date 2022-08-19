@@ -4,8 +4,11 @@
   max-height: 500px;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  /*overflow-y: auto;*/
   margin-bottom: 12%;
+  max-width: 350px;
+  background: white;
+  overflow-y: auto;
 }
 
 .drop-zone{
@@ -104,6 +107,46 @@
   display: flex;
   flex-direction: row;
 }
+.files .file .file-list{
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  justify-content: space-evenly;
+  gap: 5px;
+  max-height: 55px;
+  height: 55px;
+}
+.files .file .file-list .detail{
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.files .file .file-list small{
+  max-height: 50px;
+  /*height: 50px;*/
+  display: flex;
+  flex-direction: column;
+  text-justify: distribute;
+  text-align: start;
+  overflow: hidden;
+  position: relative;
+  padding: 2% 0;
+}
+.files .file .file-list small:after{
+  bottom: 0%;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  background:linear-gradient(to top,white,transparent);
+}
+.files .file .file-list:after{
+  width: 100%;
+  content: '';
+  border: 1px solid darkgrey;
+}
+
 .files .file button{
   width: max-content;
   height: max-content;
@@ -171,7 +214,7 @@ input{
   display: flex;
   justify-content: center;
   text-align: center;
-  /*align-items: center;*/
+  place-items: center;
   margin: auto;
   border-radius: 50%;
   border-style: solid;

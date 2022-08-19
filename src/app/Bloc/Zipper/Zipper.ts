@@ -1,4 +1,5 @@
 import * as JSZip from "jszip";
+import {printer} from "../AppHelper";
 
 
 export class FileProcess{
@@ -49,9 +50,9 @@ export class Zipper {
 
     for (this.filesCompressed = 0; this.filesCompressed< this.totalFiles; this.filesCompressed++) {
       let file = this.files[this.filesCompressed];
-      // console.log("Compressing Objects " + this.filesCompressed + "/" + files.length);
+      // printer.print("Compressing Objects " + this.filesCompressed + "/" + files.length);
       zipper.file(file.filePath,await this.ReadFileAsync(file))
-      // console.log("Compressed Objects " + this.filesCompressed+1 + "/" + files.length)
+      // printer.print("Compressed Objects " + this.filesCompressed+1 + "/" + files.length)
     }
     return zipper;
   }
@@ -62,13 +63,13 @@ export class Zipper {
       fileReader.onload = (e) => {
         fileProcess.fileBuffer = fileReader.result;
         resolve(fileReader.result);
-        console.log("Completed Reading " + fileProcess.file.name)
+        printer.print("Completed Reading " + fileProcess.file.name)
       };
 
       fileReader.onprogress = (data)=> {
         if (data.lengthComputable) {
           var progress = parseInt( String(((data.loaded / data.total) * 100)), 10 );
-          // console.log(progress);
+          // printer.print(progress);
           fileProcess.loaded = data.loaded ;
           fileProcess.progress  = progress;
         }

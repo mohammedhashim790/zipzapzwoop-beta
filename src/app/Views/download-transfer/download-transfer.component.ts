@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {AppAnimations, AppHelper} from "../../Bloc/AppHelper";
+import {AppAnimations, AppHelper, printer} from "../../Bloc/AppHelper";
 import {StorageHelper} from "../../Bloc/Storage/Storage";
 import {API} from "aws-amplify";
 
@@ -19,6 +19,7 @@ import * as expressZip from 'express';
 
 
 import {saveAs} from "@progress/kendo-file-saver";
+import {environment} from "../../../environments/environment";
 
 
 
@@ -63,17 +64,17 @@ export class DownloadTransferComponent implements OnInit {
               private storageHelper:StorageHelper,
               ) {
     this.redirect = this.routerParams.snapshot.queryParamMap.get("redirect") == "true";
-    console.log(this.redirect);
-    console.log(this.router.url);
+    printer.print(this.redirect);
+    printer.print(this.router.url);
     if(this.redirect){
       //TODO
       // MAIL REDIRECT
       this.id = this.routerParams.snapshot.queryParamMap.get("id")
-      this.readInfoFromMail();
+      this.readInfo(true);
     }else {
       this.id = this.router.url.replace("/","");
       // this.id = this.routerParams.snapshot.queryParamMap.get("source");
-      this.readInfoFromLink();
+      this.readInfo(false);
     }
   }
 
@@ -81,16 +82,68 @@ export class DownloadTransferComponent implements OnInit {
 
   }
 
+  private async readInfo(fromMail:boolean){
+    try{
+      let result;
+
+      if (fromMail) {
+        printer.print("Reading from Mail");
+        let res = await (API.graphql({
+          query: queries.getSession,
+          variables: {
+            id:this.id
+          },
+          authMode: "API_KEY"
+        }) as Promise<GraphQLResult>);
+        printer.print(res);
+        result = ((res.data as any).getSession) as GetSessionQuery;
+        this.transfer = result;
+      }
+      else {
+        printer.print("Reading from Link");
+        let res = await (API.graphql({
+          query: queries.listSessions,
+          variables: {
+            filter: {
+              shortUrl: {
+                eq: this.id
+              }
+            }
+          },
+          authMode: "API_KEY"
+        }) as Promise<GraphQLResult>);
+        printer.print(res);
+        result = ((res.data as any).listSessions) as ListSessionsQuery;
+        this.transfer = result.items[0] as GetSessionQuery;
+      }
+
+      if(this.transfer?.expiry!=0 && this.transfer?.expiry!=undefined &&  this.isExpired(this.transfer!.expiry))
+        throw new Error("File Expired");
+
+      if (this.transfer!.passwordProtected == false) {
+        this.passwordVerified = true;
+      } else {
+        if ((this.transfer!.password != "" || this.transfer!.password != null)) {
+          this.passwordVerified = false;
+        }
+      }
+      this.downloadState = DownloadTransferUIState.LOADED;
+    }catch (e){
+      this.downloadState = DownloadTransferUIState.NOT_FOUND;
+      console.error(e);
+    }
+  }
+
   private async readInfoFromLink(){
     this.downloadState = DownloadTransferUIState.LOADING;
     if(this.id == null) {
-      console.log("File Not found")
+      printer.print("File Not found")
       this.downloadState = DownloadTransferUIState.NOT_FOUND;
       return;
     }
     try{
-      console.log(this.id);
-      console.debug("Reading from Link");
+      printer.print(this.id);
+      printer.print("Reading from Link");
       let res = await (API.graphql({
         query: queries.listSessions,
         variables: {
@@ -102,12 +155,10 @@ export class DownloadTransferComponent implements OnInit {
         },
         authMode: "API_KEY"
       }) as Promise<GraphQLResult>);
-      console.log(res);
+      printer.print(res);
       let result = ((res.data as any).listSessions) as ListSessionsQuery;
-      console.log("result");
-      console.log(result);
       this.transfer = result.items[0] as GetSessionQuery;
-      console.log(this.transfer);
+      printer.print(this.transfer);
       if(this.transfer.passwordProtected == false){
         this.passwordVerified = true;
       }
@@ -123,17 +174,16 @@ export class DownloadTransferComponent implements OnInit {
     }
   }
 
-
   private async readInfoFromMail(){
     this.downloadState = DownloadTransferUIState.LOADING;
     if(this.id == null) {
-      console.log("File Not found")
+      printer.print("File Not found")
       this.downloadState = DownloadTransferUIState.NOT_FOUND;
       return;
     }
     try{
-      console.log(this.id);
-      console.debug("Reading from Link");
+      printer.print(this.id);
+      printer.print("Reading from Link");
       let res = await (API.graphql({
         query: queries.getSession,
         variables: {
@@ -141,12 +191,12 @@ export class DownloadTransferComponent implements OnInit {
         },
         authMode: "API_KEY"
       }) as Promise<GraphQLResult>);
-      console.log(res);
+      printer.print(res);
       let result = ((res.data as any).getSession) as GetSessionQuery;
-      console.log("result");
-      console.log(result);
+      printer.print("result");
+      printer.print(result);
       this.transfer = result;
-      console.log(this.transfer);
+      printer.print(this.transfer);
       if(this.transfer.passwordProtected == false){
         this.passwordVerified = true;
       }
@@ -163,51 +213,44 @@ export class DownloadTransferComponent implements OnInit {
   }
 
   async DownloadTransfer() {
-    console.log(this.transfer != undefined);
-    if (this.transfer != undefined) {
-      console.log(this.transfer);
 
-
-      var filesToZip =
-        // ["https://zip-zap-zwoop-beta-storage214657-dev.s3.ap-south-1.amazonaws.com/public/res/public/33fc9a38-7d95-4f58-948c-1bbf4ae0030a/CARS.zip"]
-        this.transfer!.files;
-      if(this.transfer.files!.length == 0)
-        return;
-      var id = this.transfer!.id;
-      if(this.transfer.files!.length>1){
-        const files = filesToZip?.map(async (file) => {
-          console.log(this.storageHelper.getEmbeddedURL(id, (file!.relativePath == "") ? file!.key : file!.relativePath))
-          return {
-            'name': file!.relativePath,
-            'input': await fetch(this.storageHelper.getEmbeddedURL(id, (file!.relativePath == "") ? file!.key : file!.relativePath))
-          }
-        }) as any;
-        console.log(files);
-
-        downloadZip(files).body!
-          .pipeTo(streamSaver.createWriteStream(this.appHelper.getShortUUID() + '.zip'))
-          .then((res) => {
-            console.log("Finished Download");
-          }).catch((err) => {
-          console.error("Error");
-          console.log(err);
-        });
-      }else{
-        let element = document.createElement("a");
-        let file = this.transfer!.files![0];
-        console.log(this.storageHelper.getEmbeddedURL(id, file!.key));
-        element.href = this.storageHelper.getEmbeddedURL(id, file!.key);
-        element.download = file!.key;
-        element.target = "_self";
-        element.click();
+    console.log(this.transfer);
+    try{
+      if (this.transfer != undefined) {
+        printer.print(this.transfer);
+        console.log(this.transfer);
+        var filesToZip =
+          // ["https://zip-zap-zwoop-beta-storage214657-dev.s3.ap-south-1.amazonaws.com/public/res/public/33fc9a38-7d95-4f58-948c-1bbf4ae0030a/CARS.zip"]
+          this.transfer!.files;
+        if (this.transfer.files!.length == 0)
+          return;
+        var id = this.transfer!.id;
+        if (this.transfer.files!.length > 1) {
+          printer.print("Now Downloading");
+          printer.print(environment.downloadUrl +"/public/" + id);
+          console.log(environment.downloadUrl +"/public/" + id  );
+          let element = document.createElement("a");
+          element.href = environment.downloadUrl +"/" + id;
+          element.target = "_self";
+          element.click();
+          element.remove();
+        } else {
+          let element = document.createElement("a");
+          let file = this.transfer!.files![0];
+          printer.print(this.storageHelper.getEmbeddedURL(id, file!.key));
+          element.href = this.storageHelper.getEmbeddedURL(id, file!.key);
+          element.download = file!.key;
+          element.target = "_self";
+          element.click();
+        }
       }
-
+    }catch (e) {
+      console.error(e);
+      alert("Some Error Occurred while download files. Please use another browser.")
     }
   }
 
   async loadImage(src:string) {
-    // let res = await fetch(src);
-    // return res.blob();
 
     return fetch(src).then((res)=>{
       return res.blob();
@@ -216,11 +259,11 @@ export class DownloadTransferComponent implements OnInit {
 
 
   VerifyPassword() {
-    console.log(this.password.value);
-    console.log(this.transfer?.password);
+    printer.print(this.password.value);
+    printer.print(this.transfer?.password);
     if(this.password.value == this.transfer?.password){
       this.passwordVerified = true;
-      console.log("verified");
+      printer.print("verified");
       return;
     }
     this.password.setErrors({'verified':true});
@@ -233,17 +276,62 @@ export class DownloadTransferComponent implements OnInit {
     this.router.navigateByUrl(path);
   }
 
-  urlToPromise(url:string) {
-    // return new Promise(function(resolve, reject) {
-    //   JSZipUtils.getBinaryContent(url, function (err:any, data:any) {
-    //     if(err) {
-    //       reject(err);
-    //     } else {
-    //       resolve(data);
-    //     }
-    //   });
-    // });
+
+  private isExpired(expiry: number) {
+    let currentDate = new Date();
+    expiry*=1000;
+    let expiryDate = new Date(expiry);
+    printer.print(currentDate <= expiryDate);
+    return !(currentDate <= expiryDate);
   }
 
 }
 
+
+
+
+// async DownloadTransfer() {
+//   try{
+//     if (this.transfer != undefined) {
+//       printer.print(this.transfer);
+//       var filesToZip =
+//         // ["https://zip-zap-zwoop-beta-storage214657-dev.s3.ap-south-1.amazonaws.com/public/res/public/33fc9a38-7d95-4f58-948c-1bbf4ae0030a/CARS.zip"]
+//         this.transfer!.files;
+//       if (this.transfer.files!.length == 0)
+//         return;
+//       var id = this.transfer!.id;
+//       if (this.transfer.files!.length > 1) {
+//         const files = filesToZip?.map(async (file) => {
+//           // printer.print(this.storageHelper.getEmbeddedURL(id, (file!.relativePath == "") ? file!.key : file!.relativePath))
+//           return {
+//             'name': ((file!.relativePath == "") ? file!.key : file!.relativePath),
+//             'size':(file!.size == null)?0:file!.size,
+//             'input': await fetch(this.storageHelper.getEmbeddedURL(id, (file!.relativePath == "") ? file!.key : file!.relativePath))
+//           }
+//         }) as any;
+//
+//         downloadZip(files, {}).body!
+//           .pipeTo(streamSaver.createWriteStream(
+//             this.appHelper.DownloadName() + '.zip'))
+//           .then((res) => {
+//             printer.print("Finished Download");
+//           }).catch((err) => {
+//           console.error("Error");
+//           printer.print(err);
+//           alert("Oops!!! We have experienced some problem. Please try another browser.")
+//         });
+//       } else {
+//         let element = document.createElement("a");
+//         let file = this.transfer!.files![0];
+//         printer.print(this.storageHelper.getEmbeddedURL(id, file!.key));
+//         element.href = this.storageHelper.getEmbeddedURL(id, file!.key);
+//         element.download = file!.key;
+//         element.target = "_self";
+//         element.click();
+//       }
+//     }
+//   }catch (e) {
+//     console.error(e);
+//     alert("Some Error Occurred while download files. Please use another browser.")
+//   }
+// }

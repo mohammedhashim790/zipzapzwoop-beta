@@ -1,11 +1,12 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {AppSession} from "../../Bloc/Session/Session";
 import {StorageHelper} from "../../Bloc/Storage/Storage";
-import {AppAnimations, AppHelper, AppState} from "../../Bloc/AppHelper";
+import {AppAnimations, AppHelper, AppState, printer} from "../../Bloc/AppHelper";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {AppError, AppErrorCode, ErrorParams} from "../../Bloc/AppErrors/AppError";
 import {FormControl} from "@angular/forms";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'transfer-select',
@@ -20,27 +21,28 @@ export class TransferSelectComponent implements OnInit {
   appHelper:AppHelper = new class extends AppHelper {}
   testState: boolean = false;
 
-  dropReadyToRead:boolean = false;
+  @Input() dropReadyToRead:boolean = false;
 
-  errorInfo:FormControl = new FormControl('',[]);
+  @Input() errorInfo:FormControl = new FormControl('',[]);
 
-  errorInfoParams:ErrorParams = {};
+  @Input() errorInfoParams:ErrorParams = {};
   private errorTimeout: NodeJS.Timeout = setTimeout(()=>{
     return;
   },0);
+  environment = environment;
 
   constructor(public storageHelper:StorageHelper,
               public appSession:AppSession,
               private cdRef:ChangeDetectorRef,
               private router:Router,
               private http:HttpClient) {
-    //console.log(this.appSession);
+    //printer.print(this.appSession);
     this.appSession.CreateNewSession();
   }
 
   ngOnInit(): void {
-    //console.log(this.appSession)
-    //console.log("Tree");
+    //printer.print(this.appSession)
+    //printer.print("Tree");
   }
 
 
@@ -58,7 +60,7 @@ export class TransferSelectComponent implements OnInit {
 
   onFileSelected(event: Event) {
     const target = event.target as any;
-    //console.log(typeof target.files);
+    //printer.print(typeof target.files);
     this.addFiles(target.files);
     // this.ClearErrors();
 
@@ -74,7 +76,7 @@ export class TransferSelectComponent implements OnInit {
       return ;
     }
     if(this.appSession.appState == AppState.MAIL_SELECT){
-      this.appSession.appState = AppState.MAIL_SCHEDULE;
+      this.appSession.appState = AppState.MAIL_VERIFY;
     }else{
       this.appSession.appState = AppState.LINK_UPLOADING;
     }
@@ -152,7 +154,7 @@ export class TransferSelectComponent implements OnInit {
     if (item.isFile) {
       item.file((file: any) => {
         if(!this.dropReadyToRead) {
-          // console.log("Removing Directory " + parentFolder);
+          // printer.print("Removing Directory " + parentFolder);
           this.appSession.appFileTransfer.RemoveDirectory(parentFolder);
         }
         else{
@@ -176,7 +178,7 @@ export class TransferSelectComponent implements OnInit {
     } else if (item.isDirectory) {
       // Get folder contents
       var dirReader = item.createReader();
-      // console.log("Reading Files From " + item.name);
+      // printer.print("Reading Files From " + item.name);
       dirReader.readEntries((entries: any) => {
         for (var i = 0; i < entries.length; i++) {
           if(!this.dropReadyToRead)
@@ -187,7 +189,7 @@ export class TransferSelectComponent implements OnInit {
         console.error("Error CallaBack" + item.name);
         console.error(errorCallback)
       });
-      // console.log("Reading Files From " + item.name + " Finished");
+      // printer.print("Reading Files From " + item.name + " Finished");
     }
   }
 
@@ -220,7 +222,7 @@ export class TransferSelectComponent implements OnInit {
 
   private _Folder(files:Array<File>){
     let folderName = files[0].webkitRelativePath.split("/")[0];
-    console.log("Folder Upload");
+    printer.print("Folder Upload");
     if(files.length>this.appHelper.SeqFilesLimit)
       throw new AppError(AppErrorCode.MAXIMUM_FILES_EXCEEDED, "Maximum File in a folder exceeded. " +
         `Please zip \"${folderName}\" and upload for your ease.`)
@@ -232,8 +234,8 @@ export class TransferSelectComponent implements OnInit {
 
   ClearErrors() {
     this.errorInfo.setErrors({});
-    console.log("Cleared Errors");
-    console.log(this.appSession.appFileTransfer.files);
+    printer.print("Cleared Errors");
+    printer.print(this.appSession.appFileTransfer.files);
     this.cdRef.detectChanges();
   }
 
@@ -241,7 +243,7 @@ export class TransferSelectComponent implements OnInit {
     this.errorInfo.setErrors({});
     let key = errorParams.errorCode;
 
-    console.log("Error Console");
+    printer.print("Error Console");
 
     this.errorInfoParams = errorParams;
 
@@ -261,7 +263,7 @@ export class TransferSelectComponent implements OnInit {
 
     this.errorTimeout = setTimeout(()=> {
       this.errorInfo.setErrors({});
-      console.log("Cleared State");
+      printer.print("Cleared State");
     },10000);
     this.cdRef.detectChanges();
   }

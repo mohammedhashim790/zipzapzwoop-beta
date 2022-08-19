@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, Validators} from "@angular/forms";
-import {AppState} from "../../Bloc/AppHelper";
+import {AppState, printer} from "../../Bloc/AppHelper";
 import {AcknowledgeEmailParams, Emailer, ErrorCode, VerifyEmailParams} from "../../Bloc/Emailer/Emailer";
 import {AppSession} from "../../Bloc/Session/Session";
 
@@ -63,14 +63,14 @@ export class VerifyEmailComponent implements OnInit {
     let params = (this.emailHelper.CreateVerifyEmailBody(this.verifyEmailParams));
     this.emailHelper.sendFileEmail(params).toPromise().then((response)=>{
       if(response!=undefined){
-        console.log(response);
+        printer.print(response);
         let result = response as any;
         let statusCode = result["message"]["response"]["statusCode"];
-        console.log(statusCode);
+        printer.print(statusCode);
         if(result["message"]["success"] == true && statusCode == 200){
           this.verificationState = this.VerificationState.VERIFIED;
           this.appSession.appState = AppState.MAIL_UPLOADING;
-          console.log("User Verified");
+          printer.print("User Verified");
         }else{
           this.verificationState = this.VerificationState.UNVERIFIED;
           if(statusCode == ErrorCode.INVALID_CODE){
@@ -109,16 +109,19 @@ export class VerifyEmailComponent implements OnInit {
       sessionId: this.appSession.sessionId
     }
     let emailParams = this.emailHelper.CreateAcknowledgementEmailBody(params);
-    console.log(emailParams);
+    printer.print(emailParams);
     this.emailHelper.sendFileEmail(emailParams).toPromise().then((res)=>{
       if(res!=undefined){
-        console.log(res);
+        printer.print(res);
         let result = res as any;
-        console.log(result);
+        printer.print(result);
         if(result["result"] == true)
           this.verifyEmailParams = result["message"]["response"] as VerifyEmailParams;
-          console.log(this.verifyEmailParams);
+          printer.print(this.verifyEmailParams);
       }
+    }).catch((error)=>{
+      console.error("error");
+      console.error(error);
     })
   }
 }

@@ -1,7 +1,8 @@
 
 *{
   margin: 0;
-  font-family: "Segoe UI";
+  /*font-family: "Segoe UI";*/
+  font-family: "San Francisco";
 
 }
 download-transfer{
@@ -12,6 +13,7 @@ download-transfer{
 }
 body{
   height: 100vh;
+  overflow: hidden;
 }
 ::-webkit-scrollbar{
   width: 5px;
@@ -49,9 +51,8 @@ button{
 .input-field{
   position: relative;
 }
-
 .link:hover{
-  text-decoration: underline;
+  text-decoration: underline !important;
   cursor: pointer;
 }
 
@@ -71,6 +72,7 @@ button{
   outline: none;
   color: white;
   justify-content: center;
+  place-items: center;
 }
 
 
@@ -107,9 +109,13 @@ button{
 .error-input{
   border-color: darkred !important;
 }
+input{
+  user-select: auto !important;
+  -webkit-user-select: auto !important;
+}
 .message{
-  width: 300px;
-  min-height: 150px;
+  width: 100%;
+  height: 100px;
   resize: none;
   position: relative !important;
   top: 15px !important;
@@ -117,6 +123,7 @@ button{
 
 .carton{
   min-width: 350px !important;
+  background: white;
 }
 
 .empty-button{

@@ -1,12 +1,14 @@
 <div class="container">
   <span class="loading-container">
-    <span class="outer primary-text-color" [class.onFinishOuter]="this._getProgress()>=1" style="--border: {{getBorderWidth()}}">
+    <span class="outer primary-text-color" [class.onFinishOuter]="this._getProgress()>=1"
+          style="border:{{getBorderWidth()}}">
     </span>
     <span class="inner" [class.onFinishInner]="this._getProgress()>=1">
       <ng-container [ngSwitch]="state">
-        <h3 *ngSwitchCase="TransferUploadState.ENGINE_STARTED"
-            class="loading-num">{{getProgress()}}
-        </h3>
+        <h2 *ngSwitchCase="TransferUploadState.ENGINE_STARTED"
+            class="loading-num loader-num">
+          {{getProgress()}}
+        </h2>
         <h3 *ngSwitchCase="TransferUploadState.ENGINE_STARTING" class="loading-num">Engine Starting</h3>
         <span *ngSwitchCase="TransferUploadState.ENGINE_CORRUPTED" class="loading-num">
           <span style="width: 80%;margin: auto;display: flex;flex-direction: row;justify-content: space-evenly">
@@ -26,7 +28,7 @@
         </span>
 
       </ng-container>
-      <span class="trimmer" style="transform: translateX({{getProgress()}});">
+      <span class="trimmer" style="transform: translateX({{getProgress()}}%);">
       </span>
     </span>
   </span>

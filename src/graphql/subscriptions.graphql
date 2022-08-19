@@ -1,0 +1,187 @@
+# this is an auto generated file. This will be overwritten
+subscription OnCreateSession($owner: String) {
+  onCreateSession(owner: $owner) {
+    id
+    files {
+      key
+      bucket
+      region
+      relativePath
+      size
+    }
+    fileSize
+    password
+    passwordProtected
+    mailInfo {
+      FromEmail
+      Recipients
+      Cc
+      Bcc
+      Subject
+      Title
+      Message
+    }
+    linkInfo {
+      Title
+      Message
+    }
+    backdrop {
+      items {
+        id
+        SessionID
+        static
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+    shortUrl
+    expiry
+    scheduledAt
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnUpdateSession($owner: String) {
+  onUpdateSession(owner: $owner) {
+    id
+    files {
+      key
+      bucket
+      region
+      relativePath
+      size
+    }
+    fileSize
+    password
+    passwordProtected
+    mailInfo {
+      FromEmail
+      Recipients
+      Cc
+      Bcc
+      Subject
+      Title
+      Message
+    }
+    linkInfo {
+      Title
+      Message
+    }
+    backdrop {
+      items {
+        id
+        SessionID
+        static
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+    shortUrl
+    expiry
+    scheduledAt
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnDeleteSession($owner: String) {
+  onDeleteSession(owner: $owner) {
+    id
+    files {
+      key
+      bucket
+      region
+      relativePath
+      size
+    }
+    fileSize
+    password
+    passwordProtected
+    mailInfo {
+      FromEmail
+      Recipients
+      Cc
+      Bcc
+      Subject
+      Title
+      Message
+    }
+    linkInfo {
+      Title
+      Message
+    }
+    backdrop {
+      items {
+        id
+        SessionID
+        static
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+    shortUrl
+    expiry
+    scheduledAt
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnCreateBackdrop($owner: String) {
+  onCreateBackdrop(owner: $owner) {
+    id
+    SessionID
+    S3Object {
+      key
+      bucket
+      region
+      relativePath
+      size
+    }
+    static
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnUpdateBackdrop($owner: String) {
+  onUpdateBackdrop(owner: $owner) {
+    id
+    SessionID
+    S3Object {
+      key
+      bucket
+      region
+      relativePath
+      size
+    }
+    static
+    createdAt
+    updatedAt
+    owner
+  }
+}
+subscription OnDeleteBackdrop($owner: String) {
+  onDeleteBackdrop(owner: $owner) {
+    id
+    SessionID
+    S3Object {
+      key
+      bucket
+      region
+      relativePath
+      size
+    }
+    static
+    createdAt
+    updatedAt
+    owner
+  }
+}

@@ -1,30 +1,34 @@
 
 .body{
-  width: 100vw;
-  height: 100vh;
   display: flex;
   font-size: 1.2rem;
+  position: relative;
+  height: 100%;
+  overflow: hidden;
 }
 .carton{
   height: auto;
   margin: auto;
-  /*background-color: green;*/
   display: flex;
   flex-direction: column;
   border-radius: 5px;
   box-shadow: 0 0 15px slategray;
-  /*padding: 2%;*/
-  position: relative;
   gap: 5px;
   max-height: 600px;
   -ms-overflow-style: none;
-  /*overflow-x: hidden;*/
   min-height: 400px;
   transition: all;
   transition-timing-function: ease-in;
   transition-duration: 750ms;
-  /*height: 100%;*/
-  /*width: 30%;*/
+  position: relative;
+  background: white;
+
+  top: 50%;
+  left: 5%;
+  transform: translateY(-50%);
+  position: fixed;
+  z-index: 1000;
+
 }
 .carton::-webkit-scrollbar {
   display: none;
@@ -39,7 +43,7 @@
   height: 100vh;
   display: flex;
   visibility: hidden;
-  z-index: 99999;
+  z-index: 999999999999;
   opacity: 0.8;
   flex-direction: column;
   place-items: center;
@@ -80,6 +84,7 @@
   flex-direction: row;
   width: 100%;
   height: 100%;
+  /*overflow-y: auto;*/
 }
 
 .select-files-container{
@@ -224,8 +229,9 @@ input{
 }
 
 @media screen and (max-width: 450px) {
-  .carton{
-    height: 100%;
-    width: 95%;
-  }
+  /*.carton{*/
+  /*  height: 100%;*/
+  /*  width: 95%;*/
+  /*}*/
 }
+

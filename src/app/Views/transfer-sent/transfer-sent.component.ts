@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AppHelper, AppState} from "../../Bloc/AppHelper";
+import {AppHelper, AppState, printer} from "../../Bloc/AppHelper";
 import {AppSession} from "../../Bloc/Session/Session";
 import {Router} from "@angular/router";
 
@@ -11,6 +11,8 @@ import {Router} from "@angular/router";
 })
 export class TransferSentComponent implements OnInit {
   AppState = AppState;
+
+  appHelper:AppHelper = new class extends AppHelper {}
 
 
   public get sessionLink(){
@@ -30,7 +32,7 @@ export class TransferSentComponent implements OnInit {
   }
 
   CopyToClipBoard(event: any) {
-    console.log(event);
-    console.log("Copied");
+    printer.print(event);
+    printer.print("Copied");
   }
 }

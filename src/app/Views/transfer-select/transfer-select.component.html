@@ -1,24 +1,4 @@
 
-<div id="drop-zoned"
-     class="drop-zone"
-     *ngIf="appSession.appState == AppState.LINK_SELECT || appSession.appState == AppState.MAIL_SELECT"
-     (dragenter)="onDragEnter($event)"
-     (dragover)="onDropOver($event)"
-     (dragleave)="onDropLeave($event)"
-     (drop)="onDropFile($event)">
-
-  <span class="egg-container">
-    <span class="egg-bottom">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 236.918 236.918" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 236.918 236.918">
-        <path d="m175.849,49.544c-18.232-31.023-39.686-49.544-57.391-49.544-17.86,0-39.375,18.523-57.55,49.551-17.756,30.313-28.358,65.538-28.358,94.224 0,29.327 8.702,53.505 25.167,69.922 15.235,15.191 36.239,23.221 60.741,23.221s45.507-8.029 60.742-23.221c16.464-16.417 25.167-40.595 25.167-69.922 0.001-28.619-10.66-63.845-28.518-94.231z"/>
-      </svg>
-    </span>
-  </span>
-  <span class="content">
-    <h1>Drop it Gently!</h1>
-  </span>
-
-</div>
 
 <div
   class="select-files-container carton"
@@ -30,7 +10,7 @@
     <button class="empty-button" [class.active]="appSession.appState == AppState.LINK_SELECT" (click)="onChangeState()">
       <ion-icon name="link-outline"></ion-icon>
     </button>
-    <button class="empty-button" (click)="ClearErrors()">
+    <button *ngIf="!environment.production" class="empty-button" (click)="ClearErrors()">
       <ion-icon name="heart"></ion-icon>
     </button>
 
@@ -41,7 +21,9 @@
     [state]="appSession.formSubmitted && this.appSession.appFileTransfer.files.length == 0"
     *ngIf="this.appSession.appFileTransfer.files.length<=0;else files" class="select-files">
       <span class="plus-button">
-        <span class="plus">+</span>
+        <span class="plus">
+          <ion-icon name="add-outline"></ion-icon>
+        </span>
       </span>
       <span style="width:100%;display: flex;flex-direction: column">
         <button class="link" (click)="fileInput.click()">Select Files</button>
@@ -56,9 +38,12 @@
         class="file"
         *ngFor="let file of this.appSession.appFileTransfer.files;let index = index">
         <ng-container *ngIf="this.appSession.appFileTransfer.getSize(file.files)!='0 Kb'">
-          <span style="flex-direction: column;width: 90%">
-            <small>{{file.name}}</small>
-            <h6>{{this.appSession.appFileTransfer.getSize(file.files)}}</h6>
+          <span class="file-list">
+            <small [title]="file.name">{{file.name}}</small>
+            <span class="detail">
+              <h6>{{this.appSession.appFileTransfer.getSize(file.files)}}</h6>
+              <h6>{{file.isDirectory? file.files.length + " File(s)" : '' }}</h6>
+            </span>
           </span>
           <button (click)="this.removeFile(index)" class="empty-button">
             <i class="fa fa-times" aria-hidden="true"></i>
@@ -72,7 +57,7 @@
         <input #fileInput type="file" style="display: none" (change)="onFileSelected($event)" [multiple]="true">
         <span style="flex-direction: column;width: 90%">
           <small class="link">Add more files</small>
-          <h6>{{this.appHelper.getTotalSize(this.appSession.appFileTransfer.files)}} remaining</h6>
+          <h6>{{this.appHelper.getTotalSizeRemaining(this.appSession.appFileTransfer.files)}} remaining</h6>
         </span>
       </span>
     </span>
@@ -177,14 +162,14 @@
           class="submit primary-color"
           (click)="ProceedNext()">
     <i class="fa fa-send"></i>
-    <h5>Send Email</h5>
+    <h3>Email</h3>
   </button>
   <ng-template #linkTransfer>
     <button type="submit"
             class="submit primary-color"
             (click)="ProceedNext()">
       <i class="fa fa-send"></i>
-      <h5>Get Link</h5>
+      <h3>Get a Link</h3>
     </button>
   </ng-template>
 </span>

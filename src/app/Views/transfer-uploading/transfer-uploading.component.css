@@ -12,6 +12,7 @@
   min-height: 400px;
   max-height: 500px;
   margin-bottom: 12%;
+  overflow: hidden;
 }
 .loading-container {
   min-width: 350px;
@@ -33,7 +34,13 @@
   justify-content: center;
   align-items: center;
   display: flex;
+  border: var(--border);
+  display: -webkit-flex;
   position: relative;
+  border-radius: 50%;
+  transition: border;
+  transition-timing-function: ease-in;
+  transition-duration: 500ms;
   animation: rotateInf;
   animation-timing-function: linear;
   animation-fill-mode: forwards;
@@ -54,20 +61,21 @@
 :root {
   --border: "4px dashed"
 }
-.loading-container .outer:before {
-  content: "";
-  position: absolute;
-  border: var(--border);
-  border-color: inherit;
-  border-radius: 50%;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  transition: border;
-  transition-timing-function: ease-in;
-  transition-duration: 500ms;
-}
+/*.loading-container .outer:before {*/
+/*  content: "";*/
+/*  position: absolute;*/
+/*  border: 4px dashed;*/
+/*    !*var(--border);*!*/
+/*  border-color: inherit;*/
+/*  border-radius: 50%;*/
+/*  top: 0;*/
+/*  bottom: 0;*/
+/*  left: 0;*/
+/*  right: 0;*/
+/*  transition: border;*/
+/*  transition-timing-function: ease-in;*/
+/*  transition-duration: 500ms;*/
+/*}*/
 
 .onFinishOuter{
   animation: expandOuter !important;
@@ -105,10 +113,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: clip;
+  overflow: hidden;
 
 }
 .onFinishInner{
+  border: 1px solid;
   animation: expandInner;
   animation-duration: 1s;
   animation-timing-function: ease-in;
@@ -143,12 +152,25 @@
 }
 .loading-container .inner .loading-num{
   color: black;
-  position: absolute;
   z-index: 999;
   text-align: center;
   width: 100%;
   mix-blend-mode: unset;
+
 }
+
+.loading-container .inner .loader-num{
+  font-size: xxx-large;
+  position: relative;
+}
+
+.loading-container .inner  .loader-num:after{
+  content: '%';
+  font-size: large;
+  top: 2%;
+  position: absolute;
+}
+
 
 .progress-container{
   /*width: 100%;*/
@@ -167,5 +189,9 @@
   border: 5px solid;
   border-color: unset;
   border-top-color: #995700;
+}
+
+.loading-container .outer:before:not(:root:root) {
+  border: 4px dashed !important;
 }
 

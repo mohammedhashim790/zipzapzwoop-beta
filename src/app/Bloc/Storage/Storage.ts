@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Storage} from "aws-amplify";
 import { v4 as uuidv4 } from 'uuid';
-import {AppHelper, AppState} from "../AppHelper";
+import {AppHelper, AppState, printer} from "../AppHelper";
 import {aws_exports} from "../../aws-exports";
 import {environment} from "../../../environments/environment";
 import * as JSZip from "jszip";
@@ -20,6 +20,7 @@ import {saveAs} from "@progress/kendo-file-saver";
 
 @Injectable()
 export class StorageHelper {
+  totalSize: number = -1;
   get transferName(): string {
     return this._transferName + new Date(Date.now()).toDateString();
   }
@@ -34,10 +35,14 @@ export class StorageHelper {
 
   currentInBytes:number = 0;
 
-  iter:number = 0;
+  iterProgress:number = 0;
   filesCompressed = -1;
   totalFiles = -1;
 
+  get TotalProgress(){
+    return this.current;
+    // return this.fileProgress.reduce((num,value)=>num + value,0);
+  }
 
   private fileProgress: Array<number> = [];
   onCompleteCallback: any;
@@ -89,14 +94,22 @@ export class StorageHelper {
     try {
       await Storage.put(key, file, {
         completeCallback:(event)=>{
-          console.log("Uploaded" + key);
+          printer.print("Uploaded" + key);
         },
         progressCallback : (progress: any) =>{
-          this.current=((this.iter) + (progress.loaded/progress.total));
-          this.fileProgress[iter] = (progress.loaded/progress.total);
-          console.log(this.current);
+          // this.current=((this.iterProgress) + (progress.loaded/progress.total));
+          // this.current=((this.iterProgress) + progress.loaded);
+
+          if((this.current - this.iterProgress)<progress.loaded){
+            this.current=((this.iterProgress) + progress.loaded);
+          }
+
+          this.fileProgress[iter] = progress.loaded;
+          // printer.print(this.current);
         },
-      })
+      });
+      this.iterProgress = this.current;
+      printer.print("Uploaded File " + key + "Progress " + this.iterProgress);
     } catch (e) {
       console.error(e);
     }
@@ -123,22 +136,28 @@ export class StorageHelper {
     // this.storageState = StorageProcess.QUEUED;
     this.reset();
     this.totalInBytes = files.reduce((value, file) => value + file?.size, 0);
-    console.log(this.totalInBytes);
+    printer.print(this.totalInBytes);
     this.fileProgress = Array(files.length).fill(0);
+
+    this.totalSize = files.reduce((num:number,file:File)=> num + file.size,0);
+
+    printer.print("Files " + files.length );
+    printer.print("Total Size " + this.totalSize);
+
     files = files.flat();
     if(files.length == 1){
       let file = files[0];
-      let key = this.getKey(sessionId,this.filePathKey(file));
+      let key = this.getKey(sessionId,file.name);
       // let key = this.filePathKey(file);
-      await this.UploadObject(key, file, this.iter);
+      await this.UploadObject(key, file, 0);
       return sessionId;
     }
-
-    for (this.iter = 0; this.iter < files.length; this.iter++) {
-      let file = files[this.iter];
-      let key = this.getKey(sessionId,this.filePathKey(file));
+    this.iterProgress = 0;
+    for (let iter = 0; iter < files.length; iter++) {
+      let file = files[iter];
+      let key = this.getKey(sessionId,file.name);
       // let key = this.filePathKey(file);
-      await this.UploadObject(key, file,this.iter);
+      await this.UploadObject(key, file,iter);
     }
     return sessionId;
   }
@@ -147,14 +166,14 @@ export class StorageHelper {
   public async ZipObjects(files: Array<File>): Promise<JSZip> {
     let zipper = new JSZip();
     this.totalFiles = files.length;
-    console.log("Compressing Objects");
+    printer.print("Compressing Objects");
     for (this.filesCompressed = 0; this.filesCompressed< this.totalFiles; this.filesCompressed++) {
       let file = files[this.filesCompressed];
-      console.log("Compressing Objects " + this.filesCompressed + "/" + files.length);
+      printer.print("Compressing Objects " + this.filesCompressed + "/" + files.length);
       let compressedFile = await this.ReadFileAsync(file);
       compressedFile = compressedFile as ArrayBuffer;
       zipper.file(this.filePathKey(file),compressedFile)
-      console.log("Compressed Objects " + this.filesCompressed+1 + "/" + files.length)
+      printer.print("Compressed Objects " + this.filesCompressed+1 + "/" + files.length)
     }
     return zipper;
   }
@@ -167,7 +186,7 @@ export class StorageHelper {
         if (data.lengthComputable) {
           // resolve(fileReader);
           var progress = parseInt( String(((data.loaded / data.total) * 100)), 10 );
-          console.log(progress);
+          printer.print(progress);
         }
       }
       fileReader.readAsArrayBuffer(src);
@@ -196,6 +215,7 @@ export class StorageHelper {
 
   reset(){
     this.totalInBytes = 0;
+    this.totalSize = 0;
     this.current = 0;
     this.currentInBytes = 0;
     this.fileProgress = [];

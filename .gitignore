@@ -43,6 +43,7 @@ Thumbs.db
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
+amplify/team-provider-info.json
 amplify/.config/local-*
 amplify/logs
 amplify/mock-data
@@ -60,4 +61,9 @@ amplify-gradle-config.json
 amplifytools.xcconfig
 .secret-*
 **.sample
+amplify/*
+amplify
+amplify/backend/awscloudformation
+
 #amplify-do-not-edit-end
+/amplify/

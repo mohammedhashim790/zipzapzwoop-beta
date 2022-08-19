@@ -1,5 +1,6 @@
 import {Directive, ElementRef, Input, OnChanges, OnInit, Renderer2, SimpleChanges} from '@angular/core';
 import {animate, AnimationBuilder, AnimationMetadata, AnimationPlayer, style} from "@angular/animations";
+import {printer} from "../../Bloc/AppHelper";
 
 @Directive({
   selector: '[TooltipInfo]',
@@ -18,7 +19,7 @@ export class TooltipInfoDirective implements OnChanges,OnInit{
   tooltipColor:string = "#0000008a";
 
   constructor(private builder: AnimationBuilder,private ref:ElementRef,private renderer:Renderer2) {
-    console.log(ref);
+    printer.print(ref);
     this.parentElement = ref.nativeElement;
     // this.Init();
   }
@@ -40,21 +41,6 @@ export class TooltipInfoDirective implements OnChanges,OnInit{
 
   applyStylesToParent(){
     this.element.className = "bubble-message-container";
-    // this.element.style.backgroundColor = this.tooltipColor;
-    // this.element.style.display = "flex";
-    // this.element.style.justifyContent = "center";
-    // this.element.style.alignItems = "center";
-    // this.element.style.width = "75%";
-    // // this.element.style.height = "50px";
-    // this.element.style.maxHeight = "50px";
-    // this.element.style.position = "absolute";
-    // this.element.style.top = "-100%";
-    // this.element.style.color = "white";
-    // this.element.style.left = "50%";
-    // this.element.style.transform = "translateX(-50%)";
-    // this.element.style.zIndex = "999999";
-    // this.element.style.borderRadius = "10px"
-    // this.element.style.padding = "4%";
   }
 
   Message(): any {

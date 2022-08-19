@@ -1,7 +1,8 @@
 import {FormControl, Validators} from "@angular/forms";
 import {PasswordHelper} from "./Session";
 import {EmailParams} from "../Emailer/Emailer";
-import {AppState} from "../AppHelper";
+import {AppState, printer} from "../AppHelper";
+import {Epoch} from "aws-sdk/clients/ecr";
 
 
 export class AppTransferParams{
@@ -13,8 +14,13 @@ export class AppTransferParams{
   recipient:FormControl = new FormControl('',[Validators.required,Validators.email,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]);
   body: string = '';
 
+
+  scheduleTransfer:boolean = false;
+  scheduledAt:Epoch = 0;
+
+
   isValid(appState:AppState) {
-    console.log("state");
+    printer.print("state");
     if(appState == AppState.LINK_SELECT){
       return (
         this.passwordHelper.isValid()

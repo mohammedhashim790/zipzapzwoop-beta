@@ -12,16 +12,29 @@
   </span>
 
   <span class="info" *ngIf="appSession.appState == AppState.MAIL_SENT;else linkSentInfo">
-    <h2>
+    <ng-container *ngIf="appSession.appTransferParams.scheduleTransfer == false;else MailScheduled">
+      <h2>
       Woohoo!
-    </h2>
-    <h3>Your files has been sent.</h3>
-    <small>
-      <b>Attachments will expire in N days</b>
-    </small>
-    <span style="width: 100%;height: 100%;margin: 1.0rem;justify-content: center;display: flex">
-      <h6 class="link" (click)="appSession.appState = AppState.MAIL_SELECT">make another transfer?</h6>
-    </span>
+      </h2>
+      <h3>Your files has been sent.</h3>
+      <small>
+        <b>Transfer will expire in {{appHelper.expiryDay}} days</b>
+      </small>
+      <span style="width: 100%;height: 100%;margin: 1.0rem;justify-content: center;display: flex">
+        <h6 class="link" (click)="appSession.appState = AppState.MAIL_SELECT">make another transfer?</h6>
+      </span>
+    </ng-container>
+    <ng-template #MailScheduled>
+      <h4>Files will be sent on <br>
+        {{appSession.appTransferParams.scheduledAt * 1000 | date:'MMM d, h:mm a'}}
+      </h4>
+      <small>
+        <b>Transfer will expire in {{appHelper.expiryDay}} days</b>
+      </small>
+      <span style="width: 100%;height: 100%;margin: 1.0rem;justify-content: center;display: flex">
+        <h6 class="link" (click)="appSession.appState = AppState.MAIL_SELECT">make another transfer?</h6>
+      </span>
+    </ng-template>
   </span>
   <ng-template #linkSentInfo>
     <span class="info">
@@ -34,7 +47,7 @@
         {{sessionLink}}
       </small>
       <small>
-        <b>Attachments will expire in N days</b>
+        <b>Transfer will expire in {{appHelper.expiryDay}} days</b>
       </small>
       <span style="width: 100%;height: 100%;margin: 1.0rem;justify-content: center;display: flex" >
         <h6 class="link" (click)="ChangeState()">make another transfer?</h6>

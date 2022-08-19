@@ -1,1 +1,130 @@
+.ad-banners{
+  width: 100%;
+  margin-left: auto;
+  position: fixed;
+  float: right;
+  height: 100%;
+  border: 1px solid black;
+  background-color: #6389c4;
+  display: flex;
+  overflow: hidden;
+  flex-direction: row;
+  justify-content: end;
+  place-items: center;
+  z-index: 0;
+
+}
+
+.ad-banners .link{
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+}
+.ad-banners .link:hover{
+  text-decoration: underline;
+
+}
+
+.ad-banners .content{
+  width: 60%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  place-items: start;
+  color: white;
+}
+
+.ad-banners .content h1{
+  font-family: "Times New Roman";
+  font-size: 4.0vw;
+}
+.ad-banners .content{
+  font-size: 1.5vw;
+}
+.ad-banners .content .point-ref li{
+  margin: 5%;
+
+}
+.ad-banners .test-mode{
+  width: 200px;
+  padding: 5px;
+  background: darkred;
+  color: white;
+  position: absolute;
+  right: -40px;
+  top: 35px;
+  transform: rotate(45deg);
+  text-align: center;
+
+}
+@keyframes fadeIn {
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+
+.tnc-container{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0,0,0,0.80);
+  z-index: 999999999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  place-items: center;
+  color: white;
+}
+.tnc-container p{
+  font-size: 4.0vw;
+  text-align: center;
+}
+.tnc-container button{
+  border: 2px solid white;
+  border-radius: 15px;
+  padding: 5% 15px;
+  margin: 15%;
+  background: #6389c4;
+  color: white;
+}
+
+.review-box{
+  display: flex;
+  width: 90%;
+  margin: auto;
+  flex-direction: column;
+  place-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  margin-bottom: 5%;
+}
+
+
+.review-box input,.review-box textarea{
+  width: 80%;
+  border: none;
+  padding: 2%;
+  border-bottom: 1px solid slategrey;
+  resize: none;
+  font-size: 20px;
+  outline: none;
+}
+.review-box textarea{
+  min-height: 100px;
+}
+.review-box button{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  font-size: large;
+  place-items: center;
+  justify-content: center;
+  margin: 2%;
+}
 

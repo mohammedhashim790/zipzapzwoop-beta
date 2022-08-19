@@ -31,16 +31,34 @@
     <ng-template #show>
       <ng-container *ngIf="!this.redirect;else showMailInfo">
         <span style="width: 100%">
-          <span>
+          <span *ngIf="transfer!.linkInfo!.Title.length != 0 && transfer!.linkInfo!.Title!= ' ';else filesAreReadyTitle">
             <h2>{{transfer!.linkInfo!.Title}}</h2>
           </span>
-          <span class="message">
+          <ng-template #filesAreReadyTitle>
+            <span>
+              <h2>All Set!</h2>
+            </span>
+          </ng-template>
+          <span class="message"
+                *ngIf="transfer!.linkInfo!.Title.length != 0 &&
+                transfer!.linkInfo!.Title!= ' ';
+                else filesAreReadyContent">
             <p>
-              {{transfer!.linkInfo!.Message}}
+              <i>{{transfer!.linkInfo!.Message}}</i>
             </p>
           </span>
-          <span style="margin: 0.5rem !important;">
-            <button *ngIf="downloadTransferState!=DownloadTransferUIState.DOWNLOAD_PROCESSING;else loading" (click)="DownloadTransfer()" class="primary-app-button download-button">
+          <ng-template #filesAreReadyContent>
+            <span class="message" style="opacity: 0.4;display: flex;flex-direction: column;justify-content: center;place-items: center">
+              <span>
+                <ion-icon style="font-size: 8.0rem" name="checkmark-circle-outline"></ion-icon>
+              </span>
+              <h2>Your files are ready.</h2>
+            </span>
+          </ng-template>
+          <span class="download-button-container">
+            <button
+              *ngIf="downloadTransferState!=DownloadTransferUIState.DOWNLOAD_PROCESSING;else loading"
+              (click)="DownloadTransfer()" class="primary-app-button download-button">
               Download
             </button>
             <ng-template #loading>
@@ -53,16 +71,35 @@
       </ng-container >
       <ng-template #showMailInfo>
         <span style="width: 100%">
-          <span>
+          <span *ngIf="transfer!.mailInfo!.Title.length != 0 &&
+                transfer!.mailInfo!.Title!= ' ';
+                else filesAreReadyTitle">
             <h2>{{transfer!.mailInfo!.Title}}</h2>
           </span>
-          <span class="message">
+          <ng-template #filesAreReadyTitle>
+            <span>
+              <h2>All Set!</h2>
+            </span>
+          </ng-template>
+          <span *ngIf="transfer!.mailInfo!.Message.length != 0 &&
+                transfer!.mailInfo!.Message!= ' ';
+                else filesAreReadyContent" class="message">
             <p>
               {{transfer!.mailInfo!.Message}}
             </p>
           </span>
+          <ng-template #filesAreReadyContent>
+            <span class="message" style="opacity: 0.4;display: flex;flex-direction: column;justify-content: center;place-items: center">
+              <span>
+                <ion-icon style="font-size: 8.0rem" name="checkmark-circle-outline"></ion-icon>
+              </span>
+              <h2>Your files are ready.</h2>
+            </span>
+          </ng-template>
           <span style="margin: 0.5rem !important;">
-            <button *ngIf="downloadTransferState!=DownloadTransferUIState.DOWNLOAD_PROCESSING;else loading" (click)="DownloadTransfer()" class="primary-app-button download-button">
+            <button *ngIf="downloadTransferState!=DownloadTransferUIState.DOWNLOAD_PROCESSING;else loading"
+                    (click)="DownloadTransfer()"
+                    class="primary-app-button download-button">
               Download
             </button>
             <ng-template #loading>
