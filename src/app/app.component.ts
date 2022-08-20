@@ -4,7 +4,6 @@ import {AppAnimations, printer, windowTnCKey} from "./Bloc/AppHelper";
 import * as AOS from 'aos';
 import {EmailEpitome, Emailer, SesData} from "./Bloc/Emailer/Emailer";
 import {FloatingWidgetComponent} from "./Directives/floating-widget/floating-widget.component";
-import * as streamSaver from 'streamsaver';
 
 
 @Component({
@@ -77,15 +76,4 @@ export class AppComponent{
     }
   }
 
-  DownloadTest() {
-    printer.print("Now Downloading");
-    // let element = document.createElement("a");
-    // element.href = this.downloadService.url;
-    // element.target = "_self";
-    //
-    // element.click();
-    // element.remove();
-
-    // this.downloadService.getFile();
-  }
 }

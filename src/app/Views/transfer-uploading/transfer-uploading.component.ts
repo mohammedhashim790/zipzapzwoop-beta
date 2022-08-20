@@ -51,7 +51,7 @@ export class TransferUploadingComponent implements OnInit {
   constructor(public appSession:AppSession,
               private router:Router,
               public storageHelper:StorageHelper) {
-
+    this.state = TransferUploadState.ENGINE_CORRUPTED;
   }
 
   ngOnInit(): void {
@@ -96,7 +96,7 @@ export class TransferUploadingComponent implements OnInit {
 
     }catch (e){
       console.error(e);
-      // this._state = TransferUploadState.ENGINE_CORRUPTED;
+      this._state = TransferUploadState.ENGINE_CORRUPTED;
     }
   }
 
