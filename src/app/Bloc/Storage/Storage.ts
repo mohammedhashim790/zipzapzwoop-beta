@@ -92,7 +92,7 @@ export class StorageHelper {
     file: File | string | null | ArrayBuffer,
     iter: number) {
     try {
-      await Storage.put(key, file, {
+      let res = await Storage.put(key, file, {
         completeCallback:(event)=>{
           printer.print("Uploaded" + key);
         },
@@ -112,6 +112,7 @@ export class StorageHelper {
       printer.print("Uploaded File " + key + "Progress " + this.iterProgress);
     } catch (e) {
       console.error(e);
+      throw new Error(e as string);
     }
 
   }
@@ -158,6 +159,8 @@ export class StorageHelper {
       let key = this.getKey(sessionId,file.name);
       // let key = this.filePathKey(file);
       await this.UploadObject(key, file,iter);
+
+      throw new Error("Error Uploading !!!!. Please try again.")
     }
     return sessionId;
   }

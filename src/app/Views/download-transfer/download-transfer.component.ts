@@ -242,6 +242,7 @@ export class DownloadTransferComponent implements OnInit {
           element.download = file!.key;
           element.target = "_self";
           element.click();
+
         }
       }
     }catch (e) {
