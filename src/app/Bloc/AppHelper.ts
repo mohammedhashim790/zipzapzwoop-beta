@@ -8,7 +8,6 @@ import ShortUniqueId from "short-unique-id";
 import {Router} from "@angular/router";
 import {environment} from "../../environments/environment";
 
-
 const short = require('short-uuid');
 
 export enum AppState{
