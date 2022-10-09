@@ -21,15 +21,17 @@ export class AppTransferParams{
 
   isValid(appState:AppState) {
     printer.print("state");
+
+    if(this.recipients.length == 0 && this.recipient.valid){
+      this.recipients.push(this.recipient.value);
+      this.recipient.reset()
+    }
+
     if(appState == AppState.LINK_SELECT){
       return (
         this.passwordHelper.isValid()
       );
     }else{
-      if(this.recipients.length==0){
-        this.recipient.valid;
-        return false;
-      }
       return (
         this.passwordHelper.isValid() &&
         this.fromAddress.valid &&

@@ -47,7 +47,14 @@ export class TransferSelectComponent implements OnInit {
 
 
   onClickInputEnter() {
-    if(!this.appSession.appTransferParams.recipient.errors?.['email'] && this.appSession.appTransferParams.recipient.valid){
+
+    printer.print(this.appSession.appTransferParams
+      .recipients.indexOf(this.appSession.appTransferParams.recipient.value));
+
+    if(!this.appSession.appTransferParams.recipient.errors?.['email'] &&
+      this.appSession.appTransferParams.recipient.valid &&
+      this.appSession.appTransferParams
+        .recipients.indexOf(this.appSession.appTransferParams.recipient.value)==-1 ){
       this.appSession.appTransferParams.recipients.unshift(this.appSession.appTransferParams.recipient.value);
       this.appSession.appTransferParams.recipient.reset();
     }
@@ -235,7 +242,7 @@ export class TransferSelectComponent implements OnInit {
   ClearErrors() {
     this.errorInfo.setErrors({});
     printer.print("Cleared Errors");
-    printer.print(this.appSession.appFileTransfer.files);
+    printer.print(this.appSession);
     this.cdRef.detectChanges();
   }
 

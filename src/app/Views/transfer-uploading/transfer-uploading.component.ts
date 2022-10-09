@@ -66,6 +66,7 @@ export class TransferUploadingComponent implements OnInit {
       let data = this.appSession.appFileTransfer.files.map((file)=>file.files);
       if(data.length == 0)
         throw new AppError(AppErrorCode.NO_FILES_AVAILABLE,"File list is empty")
+
       printer.print("Files to upload");
       printer.print(data.flat().length);
       this.totalFiles = data.flat().length;
@@ -205,5 +206,11 @@ export class TransferUploadingComponent implements OnInit {
       } else if (this.appSession.appState == AppState.LINK_UPLOADING)
         this.appSession.appState = AppState.LINK_SENT;
     },2500);
+  }
+
+  NewSession() {
+    this.appSession.sessionId = this.appSession.UUIDV4();
+    printer.print(this.appSession);
+    this.appSession.appState = AppState.MAIL_SELECT;
   }
 }

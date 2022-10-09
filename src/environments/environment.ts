@@ -6,7 +6,8 @@ export const environment = {
   production: false,
   apiKey:'https://zipzapzwoop-storage115812-dev.s3.ap-south-1.amazonaws.com/public/',
   downloadUrl:"http://streamer-dev.ap-south-1.elasticbeanstalk.com/download",
-  emailApi:"https://bm5y6mgjxd24vpyvtqmihuflva0uvdbh.lambda-url.ap-south-1.on.aws/"
+  emailApi:"https://bm5y6mgjxd24vpyvtqmihuflva0uvdbh.lambda-url.ap-south-1.on.aws/",
+  we:"https://we.zipzapzwoop.com/"
 };
 
 /*

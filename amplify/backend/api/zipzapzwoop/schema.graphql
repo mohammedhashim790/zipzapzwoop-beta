@@ -1,0 +1,81 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+
+#interface SessionParams{
+#  files:[S3Object]
+#  password:String
+#  passwordProtected:Boolean
+#  mailInfo: MailInfo
+#  linkInfo: LinkInfo
+#  backdrop:[Backdrop]
+#  shortUrl:String
+#  expiry:Int
+#}
+#
+
+type Session
+@model
+@auth(
+  rules:[
+    {allow:public,operations:[create,read]}
+
+    {allow:owner,operations:[create,read,update,delete]}
+    {allow:groups,groups:["admin"],operations:[create,read,update,delete]}
+  ]
+){
+  id:ID!
+  files:[S3Object]
+  fileSize:String
+  password:String
+  passwordProtected:Boolean @default(value: "false")
+  mailInfo: MailInfo
+  linkInfo: LinkInfo
+  #  @hasMany(indexName:"MailRef",fields:["id"])
+  backdrop:[Backdrop] @hasMany(indexName:"BackDropRef",fields:["id"])
+  shortUrl:String
+  expiry:Int @default(value: "0")
+  scheduledAt:Int @default(value: "0")
+  #  @default(value:"")
+}
+
+
+type MailInfo{
+  #  id:ID!
+  FromEmail:String!
+  Recipients:[String]!
+  Cc:[String]
+  Bcc:[String]
+  Subject:String!
+  Title:String!
+  Message:String!
+}
+type LinkInfo{
+  #  id:ID!
+  Title:String!
+  Message:String!
+}
+
+type Backdrop
+@model
+@auth(
+  rules:[
+    {allow:public,operations:[read]}
+
+    {allow:owner,operations:[create,read,update,delete]}
+    {allow:groups,groups:["admin"],operations:[create,read,update,delete]}
+  ]
+){
+  id:ID!
+  SessionID:ID! @index(name:"BackDropRef")
+  S3Object:S3Object!
+  static:Boolean!
+}
+
+type S3Object{
+  key:String!
+  bucket:String!
+  region:String!
+  relativePath:String!
+  size:String
+}

@@ -3,7 +3,7 @@
   margin: 0;
   /*font-family: "Segoe UI";*/
   font-family: "San Francisco";
-
+  scroll-behavior: smooth;
 }
 download-transfer{
   width: 100%;
@@ -13,7 +13,11 @@ download-transfer{
 }
 body{
   height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
+  background: linear-gradient(#CCCCFF,navajowhite);
+}
+p{
+  line-height: 150%;
 }
 ::-webkit-scrollbar{
   width: 5px;
@@ -98,6 +102,16 @@ button{
 /*  transform: translate(0,0px) scale(0.8);*/
 /*  color: slategray;*/
 /*}*/
+
+.bottom-ad{
+  width: 100%;
+  min-height: 25px;
+  height: auto;
+  position: absolute;
+  bottom: 0;
+  /*background: white;*/
+  right: 0;
+}
 
 
 

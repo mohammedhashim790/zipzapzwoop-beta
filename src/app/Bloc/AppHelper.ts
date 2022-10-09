@@ -24,9 +24,11 @@ export enum AppState{
   LINK_SENT
 }
 
-export const duration = '250ms ease-in';
+
 
 export const windowTnCKey = "z3session";
+
+export const duration = '250ms ease-in';
 
 const left = [
   query(':enter, :leave', style({ }), { optional: true }),
@@ -174,7 +176,6 @@ export abstract class AppHelper{
   }
 
   public getShortUUID(){
-
     return this.shortUuid();
   }
 
@@ -183,10 +184,10 @@ export abstract class AppHelper{
   }
 
   //2GB
-  // private readonly _bytesInGigaBytes:number = (2**30) * 2 ;
+  private readonly _bytesInGigaBytes:number = (2**30) * 3 ;
 
   //5GB
-  private readonly _bytesInGigaBytes:number = (2**30) * 5 ;
+  // private readonly _bytesInGigaBytes:number = (2**30) * 5 ;
   // private readonly _bytesInGigaBytes:number = 5368709120;
 
 
@@ -238,26 +239,6 @@ export abstract class AppHelper{
 
   DownloadName() {
     return "zipzapzwoop_transfer_" + new Date(Date.now()).toLocaleDateString().replace("/","_");
-  }
-
-  public getBrowserName() {
-    const agent = window.navigator.userAgent.toLowerCase()
-    switch (true) {
-      case agent.indexOf('edge') > -1:
-        return 'edge';
-      case agent.indexOf('opr') > -1 && !!(<any>window).opr:
-        return 'opera';
-      case agent.indexOf('chrome') > -1 && !!(<any>window).chrome:
-        return 'chrome';
-      case agent.indexOf('trident') > -1:
-        return 'ie';
-      case agent.indexOf('firefox') > -1:
-        return 'firefox';
-      case agent.indexOf('safari') > -1:
-        return 'safari';
-      default:
-        return 'other';
-    }
   }
 
 }

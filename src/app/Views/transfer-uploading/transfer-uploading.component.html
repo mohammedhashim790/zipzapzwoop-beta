@@ -1,6 +1,6 @@
 <div class="container">
   <ng-container [ngSwitch]="state">
-    <ng-container *ngSwitchCase="TransferUploadState.ENGINE_STARTING">
+    <ng-container *ngIf="state == TransferUploadState.ENGINE_STARTED || state == TransferUploadState.ENGINE_STARTING">
       <span class="loading-container">
         <span class="outer primary-text-color" [class.onFinishOuter]="this._getProgress()>=1"
               style="border:{{getBorderWidth()}}">
@@ -10,16 +10,13 @@
               class="loading-num loader-num">
             {{getProgress()}}
           </h2>
-          <h3  class="loading-num">Engine Starting</h3>
+          <h3 *ngIf="state == TransferUploadState.ENGINE_STARTING" class="loading-num" >Engine Starting</h3>
           <span class="trimmer" style="transform: translateX({{getProgress()}}%);">
           </span>
         </span>
       </span>
       <span class="progress-container">
         <small *ngIf="state == TransferUploadState.ENGINE_STARTED" style="font-size: x-small;font-weight: bolder">{{getProgressCompleted()}}</small>
-        <small *ngIf="state == TransferUploadState.COMPRESSING_OBJECTS" style="font-size: x-small;font-weight: bolder">
-          Please wait as we are processing your files..
-        </small>
       </span>
     </ng-container>
 
@@ -41,7 +38,7 @@
         </span>
 
         <span class="retry-button">
-          <button class="primary-app-button">
+          <button class="primary-app-button" (click)="NewSession()">
             <label style="font-size: large">Retry</label>
           </button>
         </span>

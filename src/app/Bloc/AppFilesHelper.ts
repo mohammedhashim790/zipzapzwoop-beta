@@ -149,21 +149,3 @@ export class AppFilesHelper {
   }
 }
 
-
-
-
-// setIfAbsent(file:File){
-//   if(this.files.findIndex((imap)=>imap.name == file.name)!=-1){
-//     return ;
-//   }
-//   this.files.push(new IMap(file.name,file,false));
-// }
-// setIfAbsentDirectory(file:File ,path:string){
-//   let folderName = file.webkitRelativePath.split("/")[0];
-//   let index = this.files.findIndex((value => value.name == folderName.replace("/","")));
-//   if(index!=-1){
-//     this.files[index].files.push(file);
-//   }else{
-//     this.files.push(new IMap(folderName,file,true));
-//   }
-// }

@@ -27,6 +27,11 @@ import { PolicyViewerComponent } from './Views/policy-viewer/policy-viewer.compo
 import {DatePipe} from "@angular/common";
 import {FloatingWidgetComponent} from "./Directives/floating-widget/floating-widget.component";
 import {environment} from "../environments/environment";
+import { AboutComponent } from './Views/Static/about/about.component';
+import { PrivacyPolicyComponent } from './Views/Static/privacy-policy/privacy-policy.component';
+import { TermsAndConditionsComponent } from './Views/Static/terms-and-conditions/terms-and-conditions.component';
+import {ScrollOnViewDirective} from "./Directives/ScrollOnView/scroll-on-view.directive";
+import { ViewOnTopDirective } from './Directives/ViewOnTop/view-on-top.directive';
 
 Amplify.configure(aws_exports)
 Auth.configure(aws_exports);
@@ -43,11 +48,16 @@ API.configure(aws_exports)
     MapKeyValuePipe,
     TransferSelectComponent,
     CopyClipboardDirective,
+    ScrollOnViewDirective,
     DownloadTransferComponent,
     TooltipInfoDirective,
     GoogleAdsenseComponent,
     PolicyViewerComponent,
     FloatingWidgetComponent,
+    AboutComponent,
+    PrivacyPolicyComponent,
+    TermsAndConditionsComponent,
+    ViewOnTopDirective,
 
   ],
     imports: [

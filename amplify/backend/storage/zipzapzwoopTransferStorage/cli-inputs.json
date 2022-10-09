@@ -1,0 +1,17 @@
+{
+  "resourceName": "zipzapzwoopTransferStorage",
+  "policyUUID": "e8bc0fb6",
+  "bucketName": "zipzapzwoop-storage",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "CREATE_AND_UPDATE",
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}

@@ -38,13 +38,15 @@ export class StorageHelper {
   iterProgress:number = 0;
   filesCompressed = -1;
   totalFiles = -1;
+  private fileProgress: Array<number> = [];
+
+
 
   get TotalProgress(){
     return this.current;
     // return this.fileProgress.reduce((num,value)=>num + value,0);
   }
 
-  private fileProgress: Array<number> = [];
   onCompleteCallback: any;
 
 
@@ -160,7 +162,6 @@ export class StorageHelper {
       // let key = this.filePathKey(file);
       await this.UploadObject(key, file,iter);
 
-      throw new Error("Error Uploading !!!!. Please try again.")
     }
     return sessionId;
   }
@@ -218,12 +219,15 @@ export class StorageHelper {
 
   reset(){
     this.totalInBytes = 0;
-    this.totalSize = 0;
     this.current = 0;
     this.currentInBytes = 0;
+    this.iterProgress = 0;
+    this.filesCompressed = -1;
+    this.totalFiles = -1;
     this.fileProgress = [];
     this.onCompleteCallback = () => {}
   }
+
 
   private filePathKey(file: File) {
     return (

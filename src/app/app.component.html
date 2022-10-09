@@ -20,17 +20,19 @@
 
 </floating-widget>
 
-<div style="width: 100vw;height: 100vh" (dragenter)="onDragEnter($event)">
+<div style="width: 100vw;height: 100vh;position: absolute" (dragenter)="onDragEnter($event)">
   <div @ScaleAndDisappear *ngIf="!tncAccepted" class="tnc-container">
-    <b style="color: #ff6262;font-size: 4.0vh;position: absolute;top: 2%">
-      *This a Beta edition*
-    </b>
+<!--    <b style="color: #ff6262;font-size: 4.0vh;position: absolute;top: 2%">-->
+<!--      *This a Beta edition*-->
+<!--    </b>-->
     <p style="font-size: 4.0vh">
       Hey There Sender!
       <br>
       Welcome to <b>zipzapzwoop.com</b>
       <br>
-      We are happy to serve you!
+        Send Large files to anyone and anybody with just a click.
+      <br>
+        <b>zipzapzwoop.com</b> is absolutely free and you can send upto {{appHelper.getSizeInWords(appHelper.bytesInGigaBytes)}} of files for free.
       <br>
       <br>
       <label style="font-size: 3.0vh">
@@ -46,7 +48,7 @@
           target="_blank"
           href="https://www.privacypolicygenerator.info/live.php?token=DX96xTeoW2F8ETiwsGNiGdnSxK1I5bqA"
           class="link">Privacy Policy</a>
-        to test our service.</label>
+        </label>
     </p>
     <span>
       <button (click)="Accepted()">
@@ -54,13 +56,152 @@
       </button>
     </span>
   </div>
+  <fieldset class="empty-button" [disabled]="!tncAccepted">
+    <router-outlet></router-outlet>
+  </fieldset>
+</div>
+
+<div class="bottom-ad">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4695651265515059"
+          crossorigin="anonymous"></script>
+  <!-- AppUnit 1 -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-4695651265515059"
+       data-ad-slot="2707698747"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+
+<div class="right-ad">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4695651265515059"
+          crossorigin="anonymous"></script>
+  <!-- AppUnit 1 -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-4695651265515059"
+       data-ad-slot="2707698747"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+
+</div>
+
+<div id="ViewPort" #ViewPort
+     style="width: 100vw;height: 100vh;overflow-y: scroll"
+     (scroll)="OnScroll($event)">
 
 
-  <div class="ad-banners" data-aos="fade-in">
-    <span class="test-mode" data-aos="fade-in">
-      <h3>Beta Version V1</h3>
-    </span>
-    <div class="content" data-aos="fade-up" data-aos-duration="1500">
+  <span class="menu-left">
+    <button (click)="openWindow('privacy')">
+      Privacy
+    </button>
+    <button (click)="openWindow('')">
+      About
+    </button>
+    <button (click)="openWindow('terms')">
+      T&C
+    </button>
+  </span>
+
+
+  <div #ViewPort1 id="ViewPort1" class="ad-banners"  style="background: #CCCCFF">
+    <div class="content">
+      <h1>
+        <b>Transfer Large Files for Free!</b>
+      </h1>
+      <p>
+        Scroll down to know more
+        <br>
+        or
+        <br>
+        Visit <a class="link" href="https://we.zipzapzwoop.com" target="_blank">we.zipzapzwoop.com</a>
+      </p>
+
+      <span class="link-animation-container">
+        <span class="link">
+
+        </span>
+      </span>
+
+    </div>
+
+  </div>
+
+  <div id="ViewPort2" class="ad-banners" style="background: cadetblue">
+    <div class="content">
+      <h1>
+        <b>Email Large Files for Free!</b>
+      </h1>
+
+      <p style="margin: 2%;font-size: larger">
+        <br>
+        Tired of emailing large files multiple times?
+        <br>
+        Don’t worry, we hear your cries! ‘How do we send big files online, free?’ – Well, we have you covered!
+        <br>
+        <br>
+        With <a class="link" href="" target="_self">zipzapzwoop</a> you can share
+        <b style="font-size: xxx-large">Big Content</b> to anyone around the world.
+        <br>
+      </p>
+
+    </div>
+  </div>
+
+  <div #ViewPort3 class="ad-banners"  style="background: #6495ED;color: white">
+    <div class="content" style="color: inherit">
+      <h1 style="color: inherit">
+        <b>Or Get a link for your files</b>
+      </h1>
+      <p style="font-size: larger;margin-top: 2%;color: inherit">
+        Drop your files and share the link to the world.
+        <br>
+        Let the world see your impressions
+        <br>
+        <br>
+        All you've to do is
+      </p>
+      <ul class="point-ref" style="color: inherit">
+        <li>
+          Drop your files
+        </li>
+        <li>
+          Add a Title / Message
+        </li>
+        <li>
+          Copy the Generated Link and share it to anyone.
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+
+  <div #ViewPort4 class="ad-banners"  style="background: #9FE2BF">
+    <div class="content">
+      <h1>
+        <b>Password Protect your transfer!</b>
+      </h1>
+      <p>
+        Want to Secure your transfer?. Don't worry!!
+        <br>
+        We've you covered.
+        <br>
+        Enable the <b>Password Icon</b> on Floating Menu console to Secure Transfer.
+        <br>
+        Simple as that!
+      </p>
+    </div>
+  </div>
+
+  <div id="ViewPort5" class="ad-banners" >
+    <div class="content">
       <h1 >
         <b>zipzapzwoop.com</b>
       </h1>
@@ -68,12 +209,9 @@
         is always free.
         <br>
       </h4>
-      <ul class="point-ref" data-aos="fade-up" data-aos-delay="50" data-aos-duration="1500">
+      <ul class="point-ref">
         <li>
-          No Upfront Cost
-        </li>
-        <li>
-          You can send upto 5 GB of files for free.
+          Send {{appHelper.getSizeInWords(appHelper.bytesInGigaBytes)}} for free.
         </li>
         <li>
           Password Protect your transfer
@@ -82,18 +220,20 @@
           Fast and easy download
         </li>
         <li>
-          Get a link or Email your Transfer
+          Get a Link or Email your Transfer
         </li>
+        <li>
+          <a class="link" (click)="openWindow('')">More Details</a>
+        </li>
+
       </ul>
-      <span data-aos="fade-up" data-aos-delay="50" data-aos-duration="1500">
-        <a class="link" (click)="ReviewBox.Show()">
-          Share with us your experience about the product
-        </a>
-      </span>
+      <span data-aos="fade-up">
+          <a class="link" (click)="ReviewBox.Show()">
+            Write a review
+          </a>
+        </span>
     </div>
   </div>
 
-  <fieldset class="empty-button" [disabled]="!tncAccepted">
-    <router-outlet></router-outlet>
-  </fieldset>
+
 </div>

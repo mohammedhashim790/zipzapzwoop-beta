@@ -1,0 +1,38 @@
+{
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-zipzapzwoop-prod-205633-authRole",
+      "UnauthRoleArn": "arn:aws:iam::792856558865:role/amplify-zipzapzwoop-prod-205633-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::792856558865:role/amplify-zipzapzwoop-prod-205633-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-zipzapzwoop-prod-205633-deployment",
+      "UnauthRoleName": "amplify-zipzapzwoop-prod-205633-unauthRole",
+      "StackName": "amplify-zipzapzwoop-prod-205633",
+      "StackId": "arn:aws:cloudformation:ap-south-1:792856558865:stack/amplify-zipzapzwoop-prod-205633/fa951d50-1e40-11ed-adc8-0a79be819d8a",
+      "AmplifyAppId": "d28y42o0twfl1s"
+    },
+    "categories": {
+      "auth": {
+        "zipzapzwoop": {}
+      }
+    }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-zipzapzwoop-dev-115812-authRole",
+      "UnauthRoleArn": "arn:aws:iam::792856558865:role/amplify-zipzapzwoop-dev-115812-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::792856558865:role/amplify-zipzapzwoop-dev-115812-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-zipzapzwoop-dev-115812-deployment",
+      "UnauthRoleName": "amplify-zipzapzwoop-dev-115812-unauthRole",
+      "StackName": "amplify-zipzapzwoop-dev-115812",
+      "StackId": "arn:aws:cloudformation:ap-south-1:792856558865:stack/amplify-zipzapzwoop-dev-115812/c67d0af0-1df5-11ed-a185-069bd64dc252",
+      "AmplifyAppId": "d28y42o0twfl1s"
+    },
+    "categories": {
+      "auth": {
+        "zipzapzwoop": {}
+      }
+    }
+  }
+}

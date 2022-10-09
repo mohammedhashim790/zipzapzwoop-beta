@@ -16,7 +16,7 @@ export class TransferSentComponent implements OnInit {
 
 
   public get sessionLink(){
-    return `${window.location.href.split("http://")[1]}${this.appSession.sessionLink}`;
+    return `${window.location.href}${this.appSession.sessionLink}`;
   }
 
   constructor(public appSession:AppSession,private router:Router) {

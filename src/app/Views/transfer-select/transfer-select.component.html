@@ -4,7 +4,9 @@
   class="select-files-container carton"
   style="box-shadow: none;border:none;padding: 1.5rem;">
   <span class="options">
-    <button class="empty-button" [class.active]="this.appSession.appTransferParams.passwordHelper.passwordEnabled" (click)="this.appSession.appTransferParams.passwordHelper.togglePassword()">
+    <button class="empty-button"
+            [class.active]="this.appSession.appTransferParams.passwordHelper.passwordEnabled"
+            (click)="this.appSession.appTransferParams.passwordHelper.togglePassword()">
       <ion-icon name="lock-closed"></ion-icon>
     </button>
     <button class="empty-button" [class.active]="appSession.appState == AppState.LINK_SELECT" (click)="onChangeState()">
@@ -100,7 +102,8 @@
            type="text"
            class="value"
            [formControl]="appSession.appTransferParams.recipient"
-           (keydown.enter)="onClickInputEnter()" (keydown.tab)="onClickInputEnter()" required>
+           (keydown.enter)="onClickInputEnter()"
+           (keydown.tab)="onClickInputEnter()" required>
     <label for="recipients" class="key">Recipients</label>
   </span>
 
@@ -116,7 +119,7 @@
         [state]="appSession.formSubmitted && appSession.appTransferParams.passwordHelper.password.untouched"
         *ngIf="appSession.appTransferParams.passwordHelper.passwordEnabled"
         class="input-field">
-    <input id="password" type="password" class="value" [formControl]="appSession.appTransferParams.passwordHelper.password" required>
+    <input id="password" class="value" [formControl]="appSession.appTransferParams.passwordHelper.password" required>
     <label for="password" class="key">Password</label>
   </span>
   <span class="input-field">

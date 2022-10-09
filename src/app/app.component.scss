@@ -1,0 +1,11 @@
+
+@for $i from 2 through 8{
+  .ad-banners:nth-child(#{$i}){
+    top: calc($i) * 20px;
+    border-radius: 20px;
+  }
+}
+.ad-banners:nth-child(6){
+  border-radius: unset;
+  top: 100px;
+}

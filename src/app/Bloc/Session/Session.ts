@@ -8,7 +8,8 @@ import {AppFilesHelper} from "../AppFilesHelper";
 
 
 export class PasswordHelper{
-  passwordEnabled:boolean = true;
+  passwordEnabled:boolean = false;
+
 
   password:FormControl = new FormControl('',[Validators.required]);
 
@@ -46,7 +47,7 @@ export class AppSession{
 
 
   constructor() {
-    this.sessionId = uuidv4();
+    this.sessionId = this.UUIDV4();
     this.appState = AppState.MAIL_SELECT;
     this.appTransferParams = new AppTransferParams();
     this.appFileTransfer = new AppFilesHelper();
@@ -54,9 +55,13 @@ export class AppSession{
 
 
   CreateNewSession(){
-    this.sessionId = uuidv4();
+    this.sessionId = this.UUIDV4();
     this.appTransferParams = new AppTransferParams();
     this.appFileTransfer = new AppFilesHelper();
+  }
+
+  UUIDV4(){
+    return uuidv4();
   }
 
 
